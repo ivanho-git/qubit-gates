@@ -186,7 +186,7 @@ with tab5:
     """, unsafe_allow_html=True)
 
     team_members = [
-        {"name": "🧠 Srijan Dey", "role": "Project Lead & Quantum Developer", "img": "image1.png", "bio": "Leads the quantum logic and system design behind this simulator."},
+        {"name": "🧠 Srijan Dey", "role": "Project Lead & Quantum Developer", "img": "IMG-20251103-WA0002.jpg", "bio": "Leads the quantum logic and system design behind this simulator."},
         {"name": "💻 Ibhan Mukherjee", "role": "UI/UX Designer & Streamlit Engineer", "img": "image2.png", "bio": "Designs the elegant visuals, layout, and front-end flow of the app."},
         {"name": "⚙️ Anirban Das", "role": "Backend & Qiskit Integration", "img": "image3.png", "bio": "Ensures seamless integration between Qiskit backend and visualization modules."},
         {"name": "📊 Priya Sharma", "role": "Data Visualization & Research", "img": "image4.png", "bio": "Creates Bloch sphere visualizations and quantum gate documentation."},

@@ -625,7 +625,7 @@ with tab3:
                 st.pyplot(fig)
                 plt.close()
                 
-                this is now a **proper Faraday rotator** where you can clearly see the light's polarization plane rotating as it propagates through the magnetic medium! The 3D wave and 2D polarization diagrams make it much easier to understand what's actually happening physically. 🌟
+                st.success(f"✅ Polarization rotated by {faraday_angle_deg:.1f}°")
 
 with tab4:
     st.markdown("### 🔐 BB84 Quantum Key Distribution Protocol")

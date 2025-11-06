@@ -44,7 +44,7 @@ st.markdown("""
 st.markdown('<p class="main-header">⚛️ Quantum Gate Simulator</p>', unsafe_allow_html=True)
 
 # Create tabs for different modes
-tab1, tab2, tab3 = st.tabs(["🎯 Standard Gates", "🌀 Rotation Gates & Animation", "🔮 Faraday Rotator"])
+tab1, tab2, tab3, tab4 = st.tabs(["🎯 Standard Gates", "🌀 Rotation Gates & Animation", "🔮 Faraday Rotator", "🔐 BB84 Protocol"])
 
 with tab1:
     col1, col2 = st.columns([1, 2])
@@ -625,7 +625,213 @@ with tab3:
                 st.pyplot(fig)
                 plt.close()
                 
-                st.success(f"✅ Polarization rotated by {faraday_angle_deg:.1f}°")
+                this is now a **proper Faraday rotator** where you can clearly see the light's polarization plane rotating as it propagates through the magnetic medium! The 3D wave and 2D polarization diagrams make it much easier to understand what's actually happening physically. 🌟
+
+with tab4:
+    st.markdown("### 🔐 BB84 Quantum Key Distribution Protocol")
+    
+    # Create an attractive hero section
+    st.markdown("""
+        <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    padding: 3rem 2rem; 
+                    border-radius: 15px; 
+                    margin-bottom: 2rem;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);'>
+            <h1 style='color: white; text-align: center; margin-bottom: 1rem; font-size: 2.5rem;'>
+                🔐 BB84 Protocol
+            </h1>
+            <p style='color: white; text-align: center; font-size: 1.2rem; opacity: 0.95;'>
+                The First Quantum Cryptography Protocol - Absolutely Secure Communication
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # Introduction section
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.markdown("""
+        <div class="info-box" style="height: 100%;">
+        <h3>📚 What is BB84?</h3>
+        <p>
+        <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
+        It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
+        any eavesdropper, even one with unlimited computing power.
+        </p>
+        <p>
+        The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
+        the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="info-box" style="height: 100%;">
+        <h3>🎯 Key Features</h3>
+        <ul style="font-size: 1.05rem;">
+            <li><strong>Unconditional Security:</strong> Based on quantum physics, not computational complexity</li>
+            <li><strong>Eavesdropping Detection:</strong> Any interception attempt is detectable</li>
+            <li><strong>Perfect Forward Secrecy:</strong> Each session uses a new quantum key</li>
+            <li><strong>Photon Polarization:</strong> Uses quantum states of light particles</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # How it works section
+    st.markdown("""
+    <div style='background-color: #f8f9fa; padding: 2rem; border-radius: 10px; border-left: 5px solid #667eea;'>
+        <h3 style='color: #667eea; margin-bottom: 1rem;'>🔬 How Does BB84 Work?</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Protocol steps
+    steps_col1, steps_col2 = st.columns(2)
+    
+    with steps_col1:
+        st.markdown("""
+        <div class="info-box">
+        <h4>1️⃣ Quantum Transmission</h4>
+        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4>2️⃣ Random Measurement</h4>
+        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4>3️⃣ Basis Reconciliation</h4>
+        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with steps_col2:
+        st.markdown("""
+        <div class="info-box">
+        <h4>4️⃣ Error Checking</h4>
+        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4>5️⃣ Privacy Amplification</h4>
+        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4>6️⃣ Secure Key</h4>
+        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Polarization bases explanation
+    st.markdown("""
+    <div style='background-color: #fff3cd; padding: 1.5rem; border-radius: 10px; border-left: 5px solid #ffc107; margin-bottom: 2rem;'>
+        <h4 style='color: #856404; margin-bottom: 1rem;'>💡 The Two Bases</h4>
+        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;'>
+            <div>
+                <strong style='color: #856404;'>Rectilinear Basis (+):</strong><br>
+                Horizontal (|0⟩) and Vertical (|1⟩) polarizations
+            </div>
+            <div>
+                <strong style='color: #856404;'>Diagonal Basis (×):</strong><br>
+                +45° (|0⟩) and -45° (|1⟩) polarizations
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Why it's secure section
+    st.markdown("""
+    <div style='background-color: #d1ecf1; padding: 1.5rem; border-radius: 10px; border-left: 5px solid #0c5460; margin-bottom: 2rem;'>
+        <h4 style='color: #0c5460; margin-bottom: 1rem;'>🛡️ Why is BB84 Unbreakable?</h4>
+        <p style='margin-bottom: 0.5rem;'><strong>Heisenberg Uncertainty Principle:</strong> Measuring a quantum state in the wrong basis disturbs it.</p>
+        <p style='margin-bottom: 0.5rem;'><strong>No-Cloning Theorem:</strong> It's impossible to create identical copies of unknown quantum states.</p>
+        <p style='margin-bottom: 0;'><strong>Observable Disturbance:</strong> Any eavesdropping attempt introduces detectable errors in the transmission.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Real-world applications
+    st.markdown("""
+    <div style='background-color: #d4edda; padding: 1.5rem; border-radius: 10px; border-left: 5px solid #155724; margin-bottom: 2rem;'>
+        <h4 style='color: #155724; margin-bottom: 1rem;'>🌍 Real-World Applications</h4>
+        <ul style='margin-bottom: 0;'>
+            <li><strong>Banking & Finance:</strong> Securing high-value financial transactions</li>
+            <li><strong>Government Communications:</strong> Protecting classified information</li>
+            <li><strong>Quantum Internet:</strong> Building the foundation for quantum networks</li>
+            <li><strong>Satellite QKD:</strong> China's Micius satellite demonstrated space-based BB84</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Call to action - Interactive simulator
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                padding: 3rem 2rem; 
+                border-radius: 15px; 
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);'>
+        <h2 style='color: white; margin-bottom: 1rem; font-size: 2rem;'>
+            🧪 Ready to Experience BB84 in Action?
+        </h2>
+        <p style='color: white; font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95;'>
+            Try our interactive BB84 simulator and see quantum key distribution working in real-time!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Center the button
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🚀 ENTER THE SIMULATION LAB", use_container_width=True, type="primary"):
+            st.markdown("""
+                <meta http-equiv="refresh" content="0; url=https://bb84.srijan.dpdns.org/" />
+            """, unsafe_allow_html=True)
+            st.markdown("""
+                <script>
+                    window.open('https://bb84.srijan.dpdns.org/', '_blank');
+                </script>
+            """, unsafe_allow_html=True)
+            st.success("🎉 Opening BB84 Simulation Lab in a new tab...")
+            st.markdown("[Click here if the page doesn't open automatically](https://bb84.srijan.dpdns.org/)")
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Additional resources
+    with st.expander("📖 Learn More About BB84"):
+        st.markdown("""
+        ### Further Reading
+        
+        - **Original Paper:** Bennett, C. H., & Brassard, G. (1984). "Quantum cryptography: Public key distribution and coin tossing"
+        - **Key Concepts:** Quantum mechanics, photon polarization, basis reconciliation, privacy amplification
+        - **Modern Implementations:** Commercial QKD systems are now available with distances up to 100+ km
+        
+        ### Historical Context
+        
+        BB84 was proposed by Charles Bennett and Gilles Brassard in 1984, making it one of the earliest applications 
+        of quantum mechanics to information theory. It laid the foundation for the entire field of quantum cryptography.
+        
+        ### Recent Achievements
+        
+        - **2017:** China's Micius satellite achieved intercontinental quantum key distribution
+        - **2020:** Commercial quantum networks deployed in major cities worldwide
+        - **2023:** Record-breaking QKD distances achieved with trusted node networks
+        """)
 
 # Footer
 st.markdown("---")

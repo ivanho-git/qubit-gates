@@ -1175,10 +1175,9 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/abhinav.jpeg?raw=true" class="profile-img">
             <p class="profile-name">ABHINAV SUNEESH</p>
-            <p class="profile-role">Their Role (e.g., Quantum Lead)</p>
+            <p class="profile-role">BB84 in DFS Researcher</p>
             <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
+                Explores how BB84 operates within a Decoherence-Free Subspace to protect information from environmental noise.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1188,10 +1187,9 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
-            <p class="profile-role">Their Role (e.g., Lead Developer)</p>
+            <p class="profile-role">How To Catch the Thief?</p>
             <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
+                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions..
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1201,10 +1199,9 @@ with tab5:
         <div class="profile-card">
             <img src= class="profile-img">
             <p class="profile-name">HARI ASHWIN</p>
-            <p class="profile-role">Their Role (e.g., UI/UX Designer)</p>
+            <p class="profile-role">Qubits and Gates Expert</p>
             <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
+                The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1219,10 +1216,9 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
             <p class="profile-name">SRIJAN GUCHHAIT</p>
-            <p class="profile-role">Their Role (e.g., Content Writer)</p>
+            <p class="profile-role">BB84 Explainer & Ideal Conditions Specialist</p>
             <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
+                Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1232,10 +1228,9 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
             <p class="profile-name">OM THAVARI</p>
-            <p class="profile-role">Their Role (e.g., Project Manager)</p>
+            <p class="profile-role">Faraday Rotator Technician</p>
             <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
+                Manages optical components, ensuring polarization rotations are precise and consistent..
             </p>
         </div>
         """, unsafe_allow_html=True)

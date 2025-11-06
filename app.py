@@ -1194,7 +1194,7 @@ with tab5:
     with col3:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://picsum.photos/seed/charlie/200" class="profile-img">
+            <img src="IMG-20251103-WA0002.jpg" class="profile-img">
             <p class="profile-name">Charlie Davis</p>
             <p class="profile-role">Content & Education</p>
             <p class="profile-bio">

@@ -1127,6 +1127,9 @@ with tab5:
         text-align: center;
         transition: all 0.3s ease;
         border: 1px solid rgba(102, 126, 234, 0.1);
+        display: flex; /* Use flexbox for alignment */
+        flex-direction: column; /* Stack items vertically */
+        justify-content: flex-start; /* Align content to the top */
         height: 100%; /* Make cards in a row have the same height */
     }
     .profile-card:hover {
@@ -1141,6 +1144,8 @@ with tab5:
         border: 5px solid #667eea;
         margin-bottom: 1rem;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-left: auto;
+        margin-right: auto;
     }
     .profile-name {
         font-size: 1.5rem;
@@ -1162,18 +1167,18 @@ with tab5:
     </style>
     """, unsafe_allow_html=True)
 
-    # Team members in columns
+    # --- ROW 1 ---
     col1, col2, col3 = st.columns(3, gap="large")
 
     with col1:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://picsum.photos/seed/alice/200" class="profile-img">
-            <p class="profile-name">Alice Smith</p>
-            <p class="profile-role">Quantum Lead</p>
+            <img src="YOUR_GITHUB_IMAGE_URL_HERE_1" class="profile-img">
+            <p class="profile-name">Team Member 1</p>
+            <p class="profile-role">Their Role (e.g., Quantum Lead)</p>
             <p class="profile-bio">
-                Alice is the quantum physicist behind the core simulations. Her expertise in Qiskit and quantum mechanics 
-                ensures the scientific accuracy of the visualizations.
+                A short, engaging biography about this team member, their contributions to the project, 
+                and their passion for quantum computing.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1181,12 +1186,12 @@ with tab5:
     with col2:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://picsum.photos/seed/bob/200" class="profile-img">
-            <p class="profile-name">Bob Johnson</p>
-            <p class="profile-role">Lead Developer & UI/UX</p>
+            <img src="YOUR_GITHUB_IMAGE_URL_HERE_2" class="profile-img">
+            <p class="profile-name">Team Member 2</p>
+            <p class="profile-role">Their Role (e.g., Lead Developer)</p>
             <p class="profile-bio">
-                Bob brought the quantum world to life with his design and development skills. He crafted the intuitive Streamlit 
-                interface and the stunning custom CSS you see.
+                A short, engaging biography about this team member, their contributions to the project, 
+                and their passion for quantum computing.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1194,12 +1199,43 @@ with tab5:
     with col3:
         st.markdown("""
         <div class="profile-card">
-            <img src="IMG-20251103-WA0002.jpg" class="profile-img">
-            <p class="profile-name">Charlie Davis</p>
-            <p class="profile-role">Content & Education</p>
+            <img src="YOUR_GITHUB_IMAGE_URL_HERE_3" class="profile-img">
+            <p class="profile-name">Team Member 3</p>
+            <p class="profile-role">Their Role (e.g., UI/UX Designer)</p>
             <p class="profile-bio">
-                Charlie's passion for education shines through in the clear explanations. He researched and wrote the content 
-                for the Faraday and BB84 simulators.
+                A short, engaging biography about this team member, their contributions to the project, 
+                and their passion for quantum computing.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # --- ROW 2 (Centered) ---
+    _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
+
+    with col4:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="YOUR_GITHUB_IMAGE_URL_HERE_4" class="profile-img">
+            <p class="profile-name">Team Member 4</p>
+            <p class="profile-role">Their Role (e.g., Content Writer)</p>
+            <p class="profile-bio">
+                A short, engaging biography about this team member, their contributions to the project, 
+                and their passion for quantum computing.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col5:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="YOUR_GITHUB_IMAGE_URL_HERE_5" class="profile-img">
+            <p class="profile-name">Team Member 5</p>
+            <p class="profile-role">Their Role (e.g., Project Manager)</p>
+            <p class="profile-bio">
+                A short, engaging biography about this team member, their contributions to the project, 
+                and their passion for quantum computing.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1209,7 +1245,7 @@ with tab5:
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; color: #666; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
-        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Built with ❤️ using Qiskit and Streamlit</p>
+        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Built with ❤️ by an awesome team</p>
         <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | © 2024</p>
     </div>
 """, unsafe_allow_html=True)

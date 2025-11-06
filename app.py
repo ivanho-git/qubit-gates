@@ -1174,7 +1174,7 @@ with tab5:
         st.markdown("""
         <div class="profile-card">
             <img src= class="profile-img">
-            <p class="profile-name">"ABHINAV SUNEESH"</p>
+            <p class="profile-name">ABHINAV SUNEESH</p>
             <p class="profile-role">Their Role (e.g., Quantum Lead)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1187,7 +1187,7 @@ with tab5:
         st.markdown("""
         <div class="profile-card">
             <img src= class="profile-img">
-            <p class="profile-name">"IBHAN MUKHERJEE"</p>
+            <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">Their Role (e.g., Lead Developer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1200,7 +1200,7 @@ with tab5:
         st.markdown("""
         <div class="profile-card">
             <img src= class="profile-img">
-            <p class="profile-name">"HARI ASHWIN"</p>
+            <p class="profile-name">HARI ASHWIN</p>
             <p class="profile-role">Their Role (e.g., UI/UX Designer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1218,7 +1218,7 @@ with tab5:
         st.markdown("""
         <div class="profile-card">
             <img src= class="profile-img">
-            <p class="profile-name">"SRIJAN GUCHHAIT"</p>
+            <p class="profile-name">SRIJAN GUCHHAIT</p>
             <p class="profile-role">Their Role (e.g., Content Writer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 

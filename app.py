@@ -57,7 +57,13 @@ st.markdown("""
     .block-container span,
     .block-container div,
     .block-container label,
-    .block-container li {
+    .block-container li,
+    .block-container h1,
+    .block-container h2,
+    .block-container h3,
+    .block-container h4,
+    .block-container h5,
+    .block-container h6 {
         color: #000000 !important;
     }
     
@@ -188,26 +194,6 @@ st.markdown("""
         font-size: 1.2rem !important;
         margin-bottom: 0.5rem;
         color: #764ba2 !important;
-    }
-    
-    /* Card Styling */
-    .card {
-        background: white !important;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        margin: 1rem 0;
-        border: 1px solid rgba(102, 126, 234, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .card:hover {
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
-        transform: translateY(-5px);
-    }
-    
-    .card h1, .card h2, .card h3, .card h4, .card p, .card span, .card div, .card label {
-        color: #000000 !important;
     }
     
     /* Gradient Boxes */
@@ -445,7 +431,7 @@ st.markdown("""
     }
     
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
-        color: #000000 !important;
+        color: #667eea !important;
     }
     
     .stMarkdown p, .stMarkdown span, .stMarkdown li, .stMarkdown a {
@@ -483,14 +469,11 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Override any remaining dark mode elements */
-    div, p, span, label, input, select, textarea {
-        color: #000000 !important;
-    }
-    
-    /* White text exceptions */
-    .gradient-box div, .gradient-box p, .gradient-box span, .gradient-box label,
-    .feature-box div, .feature-box p, .feature-box span, .feature-box label,
+    /* White text exceptions for gradient boxes */
+    .gradient-box h1, .gradient-box h2, .gradient-box h3, .gradient-box h4,
+    .gradient-box p, .gradient-box span, .gradient-box div, .gradient-box label,
+    .feature-box h1, .feature-box h2, .feature-box h3, .feature-box h4,
+    .feature-box p, .feature-box span, .feature-box div, .feature-box label,
     .stButton>button, .stButton>button *,
     .custom-link-button, .custom-link-button *,
     .stTabs [aria-selected="true"] div,
@@ -528,8 +511,7 @@ with tab1:
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 🎛️ Control Panel")
+        st.subheader("🎛️ Control Panel")
         
         original_bit = st.selectbox(
             "**Initial Qubit State:**",
@@ -579,12 +561,9 @@ with tab1:
         <p>{gate_info_dict.get(gate, "")}</p>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Quantum State Visualization")
+        st.subheader("📊 Quantum State Visualization")
         
         if apply_button:
             qc = QuantumCircuit(1)
@@ -651,7 +630,7 @@ with tab1:
             plt.close()
             
             # Circuit diagram
-            st.markdown("#### 🔧 Quantum Circuit")
+            st.markdown("**🔧 Quantum Circuit**")
             try:
                 circuit_fig = qc.draw(output='mpl', style='iqp')
                 st.pyplot(circuit_fig)
@@ -661,8 +640,6 @@ with tab1:
         
         else:
             st.info("👆 Configure your quantum gate and click 'Apply Gate' to see the magic!")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
 with tab2:
     st.markdown('<p class="section-header">Rotation Gates with Animation</p>', unsafe_allow_html=True)
@@ -670,8 +647,7 @@ with tab2:
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 🎚️ Rotation Controls")
+        st.subheader("🎚️ Rotation Controls")
         
         initial_state = st.selectbox("**Initial State:**", ["|0⟩", "|1⟩", "|+⟩", "|-⟩"], key="rot_state")
         
@@ -707,12 +683,9 @@ with tab2:
             animation_speed = st.slider("Animation speed:", 1, 10, 5)
         
         apply_rotation = st.button("🔄 Apply Rotation", use_container_width=True, key="apply_rot")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Rotation Visualization")
+        st.subheader("📊 Rotation Visualization")
         
         if apply_rotation:
             if animate:
@@ -806,7 +779,7 @@ with tab2:
                 st.pyplot(fig)
                 plt.close()
                 
-                st.markdown("#### 🔧 Circuit Diagram")
+                st.markdown("**🔧 Circuit Diagram**")
                 try:
                     circuit_fig = qc.draw(output='mpl', style='iqp')
                     st.pyplot(circuit_fig)
@@ -816,8 +789,6 @@ with tab2:
         
         else:
             st.info("👆 Set your rotation parameters and click 'Apply Rotation'")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
 with tab3:
     st.markdown('<p class="section-header">Faraday Rotator Simulator</p>', unsafe_allow_html=True)
@@ -835,8 +806,7 @@ with tab3:
     col1, col2 = st.columns([1, 2])
     
     with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### ⚙️ Physical Parameters")
+        st.subheader("⚙️ Physical Parameters")
         
         initial_polarization = st.radio(
             "**Initial Polarization:**",
@@ -889,12 +859,9 @@ with tab3:
             faraday_animation_speed = st.slider("Speed:", 1, 10, 5, key="faraday_anim_speed")
         
         simulate_faraday = st.button("🔬 Run Simulation", use_container_width=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Polarization Evolution")
+        st.subheader("📊 Polarization Evolution")
         
         if simulate_faraday:
             if initial_polarization == "Horizontal (|H⟩)":
@@ -1016,7 +983,7 @@ with tab3:
                 
                 # Quantum state representation
                 st.markdown("---")
-                st.markdown("#### ⚛️ Quantum State Representation")
+                st.markdown("**⚛️ Quantum State Representation**")
                 
                 qc_initial = QuantumCircuit(1)
                 if initial_polarization == "Horizontal (|H⟩)":
@@ -1126,8 +1093,6 @@ with tab3:
         
         else:
             st.info("👆 Configure parameters and click 'Run Simulation'")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
 with tab4:
     st.markdown('<p class="section-header">BB84 Quantum Key Distribution</p>', unsafe_allow_html=True)

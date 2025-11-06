@@ -1230,8 +1230,8 @@ with tab5:
     with col5:
         st.markdown("""
         <div class="profile-card">
-            <img src="YOUR_GITHUB_IMAGE_URL_HERE_5" class="profile-img">
-            <p class="profile-name">Team Member 5</p>
+            <img src="IMG-20251106-WA0008.jpg" class="profile-img">
+            <p class="profile-name">OM THAVARI</p>
             <p class="profile-role">Their Role (e.g., Project Manager)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 

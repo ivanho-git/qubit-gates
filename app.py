@@ -300,11 +300,12 @@ st.markdown('<h1 class="main-header">⚛️ Quantum Gate Simulator</h1>', unsafe
 st.markdown('<p class="subtitle">Explore the fascinating world of quantum computing with interactive visualizations</p>', unsafe_allow_html=True)
 
 # Create tabs with icons
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🎯 Standard Gates",
     "🌀 Rotation Gates",
     "🔮 Faraday Rotator",
-    "🔐 BB84 Protocol"
+    "🔐 BB84 Protocol",
+    "🧑‍🔬 About Us"
 ])
 
 with tab1:
@@ -1110,6 +1111,99 @@ with tab4:
         - **2020:** Commercial quantum networks deployed in major cities worldwide
         - **2023:** Record-breaking QKD distances achieved with trusted node networks
         """)
+
+with tab5:
+    st.markdown('<p class="section-header">Meet The Team</p>', unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>The innovators dedicated to making quantum concepts accessible to all.</p>", unsafe_allow_html=True)
+
+    # Custom CSS for team profiles
+    st.markdown("""
+    <style>
+    .profile-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        height: 100%; /* Make cards in a row have the same height */
+    }
+    .profile-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+    }
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #667eea;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 0.25rem;
+    }
+    .profile-role {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #764ba2;
+        margin-bottom: 1rem;
+    }
+    .profile-bio {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Team members in columns
+    col1, col2, col3 = st.columns(3, gap="large")
+
+    with col1:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://picsum.photos/seed/alice/200" class="profile-img">
+            <p class="profile-name">Alice Smith</p>
+            <p class="profile-role">Quantum Lead</p>
+            <p class="profile-bio">
+                Alice is the quantum physicist behind the core simulations. Her expertise in Qiskit and quantum mechanics 
+                ensures the scientific accuracy of the visualizations.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://picsum.photos/seed/bob/200" class="profile-img">
+            <p class="profile-name">Bob Johnson</p>
+            <p class="profile-role">Lead Developer & UI/UX</p>
+            <p class="profile-bio">
+                Bob brought the quantum world to life with his design and development skills. He crafted the intuitive Streamlit 
+                interface and the stunning custom CSS you see.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://picsum.photos/seed/charlie/200" class="profile-img">
+            <p class="profile-name">Charlie Davis</p>
+            <p class="profile-role">Content & Education</p>
+            <p class="profile-bio">
+                Charlie's passion for education shines through in the clear explanations. He researched and wrote the content 
+                for the Faraday and BB84 simulators.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 # Footer
 st.markdown("<br>", unsafe_allow_html=True)

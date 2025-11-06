@@ -798,17 +798,25 @@ with tab4:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🚀 ENTER THE SIMULATION LAB", use_container_width=True, type="primary"):
-            st.markdown("""
-                <meta http-equiv="refresh" content="0; url=https://bb84.srijan.dpdns.org/" />
-            """, unsafe_allow_html=True)
-            st.markdown("""
-                <script>
-                    window.open('https://bb84.srijan.dpdns.org/', '_blank');
-                </script>
-            """, unsafe_allow_html=True)
-            st.success("🎉 Opening BB84 Simulation Lab in a new tab...")
-            st.markdown("[Click here if the page doesn't open automatically](https://bb84.srijan.dpdns.org/)")
+        st.markdown("""
+            <a href="https://bb84.srijan.dpdns.org/" target="_blank">
+                <button style="
+                    width: 100%;
+                    padding: 1rem 2rem;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    color: white;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    transition: transform 0.2s;
+                ">
+                    🚀 ENTER THE SIMULATION LAB
+                </button>
+            </a>
+        """, unsafe_allow_html=True)
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     

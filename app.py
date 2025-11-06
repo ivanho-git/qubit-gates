@@ -1082,7 +1082,7 @@ with tab4:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("""
-            <a href="https://bb84.srijan.dpdns.org/" target="_blank" style="text-decoration: none;">
+            <a href="https://bb84-render.onrender.com/" target="_blank" style="text-decoration: none;">
                 <button class="custom-link-button">
                     🚀 ENTER THE SIMULATION LAB
                 </button>

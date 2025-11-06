@@ -42,7 +42,7 @@ st.markdown("""
 st.markdown('<p class="main-header">⚛️ Quantum Gate Simulator</p>', unsafe_allow_html=True)
 
 # Create tabs for different modes
-tab1, tab2 = st.tabs(["🎯 Standard Gates", "🌀 Rotation Gates & Animation"])
+tab1, tab2, tab3 = st.tabs(["🎯 Standard Gates", "🌀 Rotation Gates & Animation", "🔮 Faraday Rotator"])
 
 with tab1:
     col1, col2 = st.columns([1, 2])
@@ -206,39 +206,61 @@ with tab2:
                 # Create animation frames
                 angles = np.linspace(0, angle_radians, num_steps)
                 
+                # Create initial state vector
+                initial_qc = QuantumCircuit(1)
+                if initial_state == "|1>":
+                    initial_qc.x(0)
+                elif initial_state == "|+>":
+                    initial_qc.h(0)
+                elif initial_state == "|->":
+                    initial_qc.x(0)
+                    initial_qc.h(0)
+                
+                initial_statevector = Statevector.from_instruction(initial_qc)
+                
                 # Placeholder for animation
                 animation_placeholder = st.empty()
+                progress_bar = st.progress(0)
+                
+                import time
                 
                 for i, current_angle in enumerate(angles):
-                    qc = QuantumCircuit(1)
+                    # Create a new circuit for rotation only
+                    rotation_qc = QuantumCircuit(1)
                     
-                    # Set initial state
-                    if initial_state == "|1>":
-                        qc.x(0)
-                    elif initial_state == "|+>":
-                        qc.h(0)
-                    elif initial_state == "|->":
-                        qc.x(0)
-                        qc.h(0)
-                    
-                    # Apply rotation
+                    # Apply rotation to get the rotation operator
                     if rotation_axis == "X":
-                        qc.rx(current_angle, 0)
+                        rotation_qc.rx(current_angle, 0)
                     elif rotation_axis == "Y":
-                        qc.ry(current_angle, 0)
+                        rotation_qc.ry(current_angle, 0)
                     else:
-                        qc.rz(current_angle, 0)
+                        rotation_qc.rz(current_angle, 0)
                     
-                    # Get statevector and plot
-                    state = Statevector.from_instruction(qc)
+                    # Apply rotation to initial state
+                    state = initial_statevector.evolve(rotation_qc)
+                    
+                    # Plot
                     fig = plot_bloch_multivector(state)
                     
                     with animation_placeholder.container():
-                        st.markdown(f"**Step {i+1}/{num_steps}** - Angle: {np.rad2deg(current_angle):.1f}°")
+                        col_a, col_b = st.columns([3, 1])
+                        with col_a:
+                            st.markdown(f"**Step {i+1}/{num_steps}** - Angle: {np.rad2deg(current_angle):.1f}° ({current_angle:.3f} rad)")
+                        with col_b:
+                            state_array = state.data
+                            st.markdown(f"**|α|²={abs(state_array[0])**2:.3f}**")
+                            st.markdown(f"**|β|²={abs(state_array[1])**2:.3f}**")
                         st.pyplot(fig)
                     
                     plt.close()
+                    
+                    # Update progress bar
+                    progress_bar.progress((i + 1) / num_steps)
+                    
+                    # Small delay for smooth animation
+                    time.sleep(0.1)
                 
+                progress_bar.empty()
                 st.success("✅ Animation complete!")
                 
             else:
@@ -279,6 +301,196 @@ with tab2:
                 # Show circuit
                 st.markdown("### 🔧 Circuit Diagram")
                 circuit_fig = qc.draw(output='mpl', style='iqp')
+                st.pyplot(circuit_fig)
+                plt.close()
+
+with tab3:
+    st.markdown("### 🔮 Faraday Rotator Simulator")
+    st.markdown("""
+    The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
+    in a magnetic field. Here we simulate this quantum mechanically with polarization states mapped to qubits.
+    """)
+    
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.markdown("#### ⚙️ Faraday Rotator Settings")
+        
+        # Polarization settings
+        st.markdown("**Initial Polarization:**")
+        initial_polarization = st.radio(
+            "Choose polarization:",
+            ["Horizontal (|H⟩)", "Vertical (|V⟩)", "Diagonal (+45°)", "Anti-diagonal (-45°)", "Right Circular", "Left Circular"],
+            label_visibility="collapsed"
+        )
+        
+        st.markdown("---")
+        
+        # Magnetic field strength (proportional to rotation)
+        st.markdown("**Magnetic Field & Material:**")
+        verdet_constant = st.slider(
+            "Verdet Constant (rad/T·m):",
+            min_value=1.0,
+            max_value=100.0,
+            value=50.0,
+            step=1.0,
+            help="Material property determining rotation strength"
+        )
+        
+        magnetic_field = st.slider(
+            "Magnetic Field Strength (Tesla):",
+            min_value=0.0,
+            max_value=5.0,
+            value=1.0,
+            step=0.1
+        )
+        
+        path_length = st.slider(
+            "Path Length (meters):",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.1,
+            step=0.01
+        )
+        
+        # Calculate Faraday rotation angle
+        faraday_angle = verdet_constant * magnetic_field * path_length
+        faraday_angle_deg = np.rad2deg(faraday_angle) % 360
+        
+        st.markdown(f"""
+        <div class="info-box">
+        <b>Faraday Rotation:</b><br>
+        θ = V × B × L<br>
+        θ = {faraday_angle:.3f} rad<br>
+        θ = {faraday_angle_deg:.1f}°
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Animation controls
+        st.markdown("**Visualization:**")
+        show_faraday_animation = st.checkbox("Animate light propagation", value=True, key="faraday_anim")
+        
+        if show_faraday_animation:
+            propagation_steps = st.slider("Propagation steps:", 10, 100, 30, key="faraday_steps")
+        
+        simulate_faraday = st.button("🔬 Run Faraday Rotator", use_container_width=True)
+    
+    with col2:
+        st.markdown("### 📊 Polarization Evolution")
+        
+        if simulate_faraday:
+            # Map polarization to qubit state
+            qc_initial = QuantumCircuit(1)
+            
+            if initial_polarization == "Horizontal (|H⟩)":
+                # |H⟩ = |0⟩
+                pass
+            elif initial_polarization == "Vertical (|V⟩)":
+                # |V⟩ = |1⟩
+                qc_initial.x(0)
+            elif initial_polarization == "Diagonal (+45°)":
+                # |D⟩ = (|H⟩ + |V⟩)/√2
+                qc_initial.h(0)
+            elif initial_polarization == "Anti-diagonal (-45°)":
+                # |A⟩ = (|H⟩ - |V⟩)/√2
+                qc_initial.x(0)
+                qc_initial.h(0)
+            elif initial_polarization == "Right Circular":
+                # |R⟩ = (|H⟩ + i|V⟩)/√2
+                qc_initial.h(0)
+                qc_initial.s(0)
+            elif initial_polarization == "Left Circular":
+                # |L⟩ = (|H⟩ - i|V⟩)/√2
+                qc_initial.h(0)
+                qc_initial.sdg(0)
+            
+            initial_state = Statevector.from_instruction(qc_initial)
+            
+            if show_faraday_animation:
+                # Animate the Faraday rotation
+                angles = np.linspace(0, faraday_angle, propagation_steps)
+                distances = np.linspace(0, path_length, propagation_steps)
+                
+                animation_placeholder = st.empty()
+                progress_bar = st.progress(0)
+                
+                import time
+                
+                for i, (current_angle, current_distance) in enumerate(zip(angles, distances)):
+                    # Apply rotation (Faraday effect is a Z-rotation in polarization basis)
+                    rotation_qc = QuantumCircuit(1)
+                    rotation_qc.rz(2 * current_angle, 0)  # Factor of 2 for proper polarization rotation
+                    
+                    # Evolve state
+                    current_state = initial_state.evolve(rotation_qc)
+                    state_array = current_state.data
+                    
+                    # Create visualization
+                    fig = plot_bloch_multivector(current_state)
+                    
+                    with animation_placeholder.container():
+                        col_a, col_b, col_c = st.columns([2, 2, 2])
+                        with col_a:
+                            st.metric("Distance", f"{current_distance*100:.1f} cm")
+                        with col_b:
+                            st.metric("Rotation", f"{np.rad2deg(current_angle):.1f}°")
+                        with col_c:
+                            st.metric("Magnetic Field", f"{magnetic_field:.1f} T")
+                        
+                        st.pyplot(fig)
+                        
+                        # Show polarization components
+                        st.markdown("**Polarization State:**")
+                        col_1, col_2 = st.columns(2)
+                        with col_1:
+                            st.markdown(f"Horizontal: **{abs(state_array[0])**2:.3f}**")
+                        with col_2:
+                            st.markdown(f"Vertical: **{abs(state_array[1])**2:.3f}**")
+                    
+                    plt.close()
+                    progress_bar.progress((i + 1) / propagation_steps)
+                    time.sleep(0.05)
+                
+                progress_bar.empty()
+                st.success(f"✅ Light rotated by {faraday_angle_deg:.1f}° through the Faraday rotator!")
+                
+            else:
+                # Static final state
+                rotation_qc = QuantumCircuit(1)
+                rotation_qc.rz(2 * faraday_angle, 0)
+                
+                final_state = initial_state.evolve(rotation_qc)
+                state_array = final_state.data
+                
+                # Display metrics
+                col_a, col_b, col_c = st.columns(3)
+                with col_a:
+                    st.metric("Total Distance", f"{path_length*100:.1f} cm")
+                with col_b:
+                    st.metric("Total Rotation", f"{faraday_angle_deg:.1f}°")
+                with col_c:
+                    st.metric("Field Strength", f"{magnetic_field:.1f} T")
+                
+                # Plot final state
+                fig = plot_bloch_multivector(final_state)
+                st.pyplot(fig)
+                plt.close()
+                
+                # Show polarization analysis
+                st.markdown("### 📈 Polarization Analysis")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown(f"**Horizontal Component:** {abs(state_array[0])**2:.4f}")
+                    st.markdown(f"**Phase (H):** {np.angle(state_array[0]):.4f} rad")
+                with col2:
+                    st.markdown(f"**Vertical Component:** {abs(state_array[1])**2:.4f}")
+                    st.markdown(f"**Phase (V):** {np.angle(state_array[1]):.4f} rad")
+                
+                # Circuit diagram
+                st.markdown("### 🔧 Quantum Circuit")
+                circuit_fig = rotation_qc.draw(output='mpl', style='iqp')
                 st.pyplot(circuit_fig)
                 plt.close()
 

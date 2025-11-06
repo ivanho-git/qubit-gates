@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Page configuration
+# Page configurationhttps://github.com/ivanho-git/qubit-gates/edit/main/app.py
 st.set_page_config(
     page_title="Quantum Gate Simulator",
     page_icon="⚛️",
@@ -1245,7 +1245,7 @@ with tab5:
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; color: #666; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
-        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Built with ❤️ by an awesome team</p>
+        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
         <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | © 2024</p>
     </div>
 """, unsafe_allow_html=True)

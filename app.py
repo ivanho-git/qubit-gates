@@ -1173,8 +1173,8 @@ with tab5:
     with col1:
         st.markdown("""
         <div class="profile-card">
-            <img src="ABHINAV SUNEESH" class="profile-img">
-            <p class="profile-name">Team Member 1</p>
+            <img src= class="profile-img">
+            <p class="profile-name">"ABHINAV SUNEESH"</p>
             <p class="profile-role">Their Role (e.g., Quantum Lead)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1186,8 +1186,8 @@ with tab5:
     with col2:
         st.markdown("""
         <div class="profile-card">
-            <img src="IBHAN MUKHERJEE" class="profile-img">
-            <p class="profile-name">Team Member 2</p>
+            <img src= class="profile-img">
+            <p class="profile-name">"IBHAN MUKHERJEE"</p>
             <p class="profile-role">Their Role (e.g., Lead Developer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1199,8 +1199,8 @@ with tab5:
     with col3:
         st.markdown("""
         <div class="profile-card">
-            <img src="HARI ASHWIN" class="profile-img">
-            <p class="profile-name">Team Member 3</p>
+            <img src= class="profile-img">
+            <p class="profile-name">"HARI ASHWIN"</p>
             <p class="profile-role">Their Role (e.g., UI/UX Designer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 
@@ -1217,8 +1217,8 @@ with tab5:
     with col4:
         st.markdown("""
         <div class="profile-card">
-            <img src="SRIJAN GUCHHAIT" class="profile-img">
-            <p class="profile-name">Team Member 4</p>
+            <img src= class="profile-img">
+            <p class="profile-name">"SRIJAN GUCHHAIT"</p>
             <p class="profile-role">Their Role (e.g., Content Writer)</p>
             <p class="profile-bio">
                 A short, engaging biography about this team member, their contributions to the project, 

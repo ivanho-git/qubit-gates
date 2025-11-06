@@ -37,6 +37,16 @@ st.markdown("""
         padding: 1rem;
         border-radius: 10px;
         margin: 1rem 0;
+        color: #000000;
+    }
+    .info-box h3, .info-box h4, .info-box p, .info-box ul, .info-box li {
+        color: #000000 !important;
+    }
+    /* Ensure text visibility in all themes */
+    [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMarkdownContainer"] li,
+    [data-testid="stMarkdownContainer"] strong {
+        color: inherit;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -651,14 +661,14 @@ with tab4:
     
     with col1:
         st.markdown("""
-        <div class="info-box" style="height: 100%;">
-        <h3>📚 What is BB84?</h3>
-        <p>
+        <div class="info-box" style="height: 100%; background-color: #f0f2f6;">
+        <h3 style="color: #000000;">📚 What is BB84?</h3>
+        <p style="color: #000000;">
         <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
         It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
         any eavesdropper, even one with unlimited computing power.
         </p>
-        <p>
+        <p style="color: #000000;">
         The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
         the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
         </p>
@@ -667,9 +677,9 @@ with tab4:
     
     with col2:
         st.markdown("""
-        <div class="info-box" style="height: 100%;">
-        <h3>🎯 Key Features</h3>
-        <ul style="font-size: 1.05rem;">
+        <div class="info-box" style="height: 100%; background-color: #f0f2f6;">
+        <h3 style="color: #000000;">🎯 Key Features</h3>
+        <ul style="font-size: 1.05rem; color: #000000;">
             <li><strong>Unconditional Security:</strong> Based on quantum physics, not computational complexity</li>
             <li><strong>Eavesdropping Detection:</strong> Any interception attempt is detectable</li>
             <li><strong>Perfect Forward Secrecy:</strong> Each session uses a new quantum key</li>
@@ -692,45 +702,45 @@ with tab4:
     
     with steps_col1:
         st.markdown("""
-        <div class="info-box">
-        <h4>1️⃣ Quantum Transmission</h4>
-        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">1️⃣ Quantum Transmission</h4>
+        <p style="color: #000000;">Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
-        <h4>2️⃣ Random Measurement</h4>
-        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">2️⃣ Random Measurement</h4>
+        <p style="color: #000000;">Bob randomly chooses bases to measure the received photons, recording the results.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
-        <h4>3️⃣ Basis Reconciliation</h4>
-        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">3️⃣ Basis Reconciliation</h4>
+        <p style="color: #000000;">Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
         </div>
         """, unsafe_allow_html=True)
     
     with steps_col2:
         st.markdown("""
-        <div class="info-box">
-        <h4>4️⃣ Error Checking</h4>
-        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">4️⃣ Error Checking</h4>
+        <p style="color: #000000;">They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
-        <h4>5️⃣ Privacy Amplification</h4>
-        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">5️⃣ Privacy Amplification</h4>
+        <p style="color: #000000;">The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
-        <h4>6️⃣ Secure Key</h4>
-        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
+        <div class="info-box" style="background-color: #f0f2f6;">
+        <h4 style="color: #000000;">6️⃣ Secure Key</h4>
+        <p style="color: #000000;">Alice and Bob now share an identical, secret key for encrypting communications!</p>
         </div>
         """, unsafe_allow_html=True)
     

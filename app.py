@@ -1,7 +1,213 @@
-import streamlit as st
+with tab3:
+    st.markdown("### 🔮 Faraday Rotator Simulator")
+    st.markdown("""
+    The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
+    in a magnetic field. Here we simulate this quantum mechanically with polarization states mapped to qubits.
+    """)
+    
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.markdown("#### ⚙️ Faraday Rotator Settings")
+        
+        # Polarization settings
+        st.markdown("**Initial Polarization:**")
+        initial_polarization = st.radio(
+            "Choose polarization:",
+            ["Horizontal (|H⟩)", "Vertical (|V⟩)", "Diagonal (+45°)", "Anti-diagonal (-45°)"],
+            label_visibility="collapsed"
+        )
+        
+        st.markdown("---")
+        
+        # Magnetic field strength (proportional to rotation)
+        st.markdown("**Magnetic Field & Material:**")
+        verdet_constant = st.slider(
+            "Verdet Constant (rad/T·m):",
+            min_value=1.0,
+            max_value=100.0,
+            value=50.0,
+            step=1.0,
+            help="Material property determining rotation strength"
+        )
+        
+        magnetic_field = st.slider(
+            "Magnetic Field Strength (Tesla):",
+            min_value=0.0,
+            max_value=5.0,
+            value=1.0,
+            step=0.1
+        )
+        
+        path_length = st.slider(
+            "Path Length (meters):",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.1,
+            step=0.01
+        )
+        
+        # Calculate Faraday rotation angle
+        faraday_angle = verdet_constant * magnetic_field * path_length
+        faraday_angle_deg = np.rad2deg(faraday_angle) % 360
+        
+        st.markdown(f"""
+        <div class="info-box">
+        <b>Faraday Rotation:</b><br>
+        θ = V × B × L<br>
+        θ = {faraday_angle:.3f} rad<br>
+        θ = {faraday_angle_deg:.1f}°
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Animation controls
+        st.markdown("**Visualization:**")
+        show_faraday_animation = st.checkbox("Animate light propagation", value=True, key="faraday_anim")
+        
+        if show_faraday_animation:
+            propagation_steps = st.slider("Propagation steps:", 10, 50, 25, key="faraday_steps")
+            animation_speed = st.slider("Animation speed:", 1, 10, 5, key="anim_speed")
+        
+        simulate_faraday = st.button("🔬 Run Faraday Rotator", use_container_width=True)
+    
+    with col2:
+        st.markdown("### 📊 Polarization Evolution")
+        
+        if simulate_faraday:
+            # Determine initial angle
+            if initial_polarization == "Horizontal (|H⟩)":
+                initial_angle = 0
+            elif initial_polarization == "Vertical (|V⟩)":
+                initial_angle = 90
+            elif initial_polarization == "Diagonal (+45°)":
+                initial_angle = 45
+            else:  # Anti-diagonal
+                initial_angle = -45
+            
+            if show_faraday_animation:
+                # Create animation
+                angles_through_medium = np.linspace(0, faraday_angle_deg, propagation_steps)
+                distances = np.linspace(0, path_length, propagation_steps)
+                
+                animation_placeholder = st.empty()
+                progress_bar = st.progress(0)
+                
+                import time
+                
+                for i, (rotation_angle, current_distance) in enumerate(zip(angles_through_medium, distances)):
+                    # Current polarization angle
+                    current_pol_angle = initial_angle + rotation_angle
+                    
+                    # Create polarization visualization
+                    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                    
+                    # Left plot: 3D view of light wave with rotating polarization
+                    ax1 = plt.subplot(121, projection='3d')
+                    
+                    # Create light wave propagating along z
+                    z = np.linspace(0, 2*np.pi, 100)
+                    
+                    # Electric field components (rotating polarization)
+                    angle_rad = np.deg2rad(current_pol_angle)
+                    Ex = np.cos(angle_rad) * np.sin(z)
+                    Ey = np.sin(angle_rad) * np.sin(z)
+                    
+                    # Plot the wave
+                    ax1.plot(Ex, Ey, z, 'b-', linewidth=2, label='E-field')
+                    
+                    # Plot polarization vector at the front
+                    arrow_length = 1.2
+                    ax1.quiver(0, 0, 0, 
+                              arrow_length * np.cos(angle_rad), 
+                              arrow_length * np.sin(angle_rad), 
+                              0,
+                              color='red', arrow_length_ratio=0.3, linewidth=3,
+                              label=f'Polarization: {current_pol_angle:.1f}°')
+                    
+                    ax1.set_xlabel('Ex (Horizontal)', fontsize=10)
+                    ax1.set_ylabel('Ey (Vertical)', fontsize=10)
+                    ax1.set_zlabel('Propagation →', fontsize=10)
+                    ax1.set_title(f'Light Wave in Medium\nDistance: {current_distance*100:.1f} cm', fontsize=12, fontweight='bold')
+                    ax1.set_xlim([-1.5, 1.5])
+                    ax1.set_ylim([-1.5, 1.5])
+                    ax1.set_zlim([0, 2*np.pi])
+                    ax1.legend(loc='upper right')
+                    ax1.view_init(elev=20, azim=45)
+                    
+                    # Right plot: Top-down view showing polarization rotation
+                    ax2.set_aspect('equal')
+                    
+                    # Draw reference axes
+                    ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, fc='gray', ec='gray', alpha=0.3, label='Horizontal')
+                    ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, fc='gray', ec='gray', alpha=0.3, label='Vertical')
+                    ax2.text(1.3, 0, 'H', fontsize=12, ha='left', va='center')
+                    ax2.text(0, 1.3, 'V', fontsize=12, ha='center', va='bottom')
+                    
+                    # Draw initial polarization (faded)
+                    initial_rad = np.deg2rad(initial_angle)
+                    ax2.arrow(0, 0, 
+                             np.cos(initial_rad), 
+                             np.sin(initial_rad), 
+                             head_width=0.15, head_length=0.15, 
+                             fc='blue', ec='blue', alpha=0.3, linewidth=2,
+                             label=f'Initial: {initial_angle}°')
+                    
+                    # Draw current polarization
+                    ax2.arrow(0, 0, 
+                             np.cos(angle_rad), 
+                             np.sin(angle_rad), 
+                             head_width=0.15, head_length=0.15, 
+                             fc='red', ec='red', alpha=1.0, linewidth=3,
+                             label=f'Current: {current_pol_angle:.1f}°')
+                    
+                    # Draw rotation arc
+                    if rotation_angle > 0:
+                        arc_angles = np.linspace(np.deg2rad(initial_angle), angle_rad, 50)
+                        arc_x = 0.5 * np.cos(arc_angles)
+                        arc_y = 0.5 * np.sin(arc_angles)
+                        ax2.plot(arc_x, arc_y, 'g--', linewidth=2, alpha=0.7)
+                        ax2.text(0, -0.7, f'Rotation: {rotation_angle:.1f}°', 
+                                fontsize=11, ha='center', color='green', fontweight='bold')
+                    
+                    ax2.set_xlim([-1.5, 1.5])
+                    ax2.set_ylim([-1.5, 1.5])
+                    ax2.set_title(f'Polarization Plane (Top View)\nMagnetic Field: {magnetic_field:.1f} T', 
+                                 fontsize=12, fontweight='bold')
+                    ax2.legend(loc='upper right', fontsize=9)
+                    ax2.grid(True, alpha=0.3)
+                    ax2.axhline(y=0, color='k', linewidth=0.5, alpha=0.3)
+                    ax2.axvline(x=0, color='k', linewidth=0.5, alpha=0.3)
+                    
+                    plt.tight_layout()
+                    
+                    with animation_placeholder.container():
+                        col_a, col_b, col_c = st.columns([2, 2, 2])
+                        with col_a:
+                            st.metric("Distance", f"{current_distance*100:.1f} cm", f"+{(current_distance/path_length)*100:.0f}%")
+                        with col_b:
+                            st.metric("Rotation", f"{rotation_angle:.1f}°", f"{(rotation_angle/faraday_angle_deg)*100:.0f}%")
+                        with col_c:
+                            st.metric("Polarization", f"{current_pol_angle:.1f}°")
+                        
+                        st.pyplot(fig)
+                    
+                    plt.close()
+                    progress_bar.progress((i + 1) / propagation_steps)
+                    time.sleep(0.1 / animation_speed)
+                
+                progress_bar.empty()
+                st.success(f"✅ Light polarization rotated from {initial_angle}° to {initial_angle + faraday_angle_deg:.1f}° ({faraday_angle_deg:.1f}° rotation)")
+                
+                # Also show quantum state
+                st.markdown("---")
+                st.markdownimport streamlit as st
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from qiskit.visualization import plot_bloch_multivector
+import matplotlib
+matplotlib.use('Agg')  # Set backend before importing pyplot
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -153,9 +359,13 @@ with tab1:
             
             # Show circuit
             st.markdown("### 🔧 Circuit Diagram")
-            circuit_fig = qc.draw(output='mpl', style='iqp')
-            st.pyplot(circuit_fig)
-            plt.close()
+            try:
+                circuit_fig = qc.draw(output='mpl', style='iqp')
+                st.pyplot(circuit_fig)
+                plt.close()
+            except Exception as e:
+                st.info("Circuit diagram visualization requires additional dependencies. Showing text version:")
+                st.code(qc.draw(output='text'), language='text')
 
 with tab2:
     st.markdown("### 🌀 Rotation Gates with Animation")
@@ -300,9 +510,13 @@ with tab2:
                 
                 # Show circuit
                 st.markdown("### 🔧 Circuit Diagram")
-                circuit_fig = qc.draw(output='mpl', style='iqp')
-                st.pyplot(circuit_fig)
-                plt.close()
+                try:
+                    circuit_fig = qc.draw(output='mpl', style='iqp')
+                    st.pyplot(circuit_fig)
+                    plt.close()
+                except Exception as e:
+                    st.info("Circuit diagram visualization requires additional dependencies. Showing text version:")
+                    st.code(qc.draw(output='text'), language='text')
 
 with tab3:
     st.markdown("### 🔮 Faraday Rotator Simulator")
@@ -490,9 +704,13 @@ with tab3:
                 
                 # Circuit diagram
                 st.markdown("### 🔧 Quantum Circuit")
-                circuit_fig = rotation_qc.draw(output='mpl', style='iqp')
-                st.pyplot(circuit_fig)
-                plt.close()
+                try:
+                    circuit_fig = rotation_qc.draw(output='mpl', style='iqp')
+                    st.pyplot(circuit_fig)
+                    plt.close()
+                except Exception as e:
+                    st.info("Circuit diagram visualization requires additional dependencies. Showing text version:")
+                    st.code(rotation_qc.draw(output='text'), language='text')
 
 # Footer
 st.markdown("---")

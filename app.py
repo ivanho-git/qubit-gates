@@ -1116,136 +1116,23 @@ with tab5:
     st.markdown('<p class="section-header">Meet The Team</p>', unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>The innovators dedicated to making quantum concepts accessible to all.</p>", unsafe_allow_html=True)
 
-    # Custom CSS for team profiles
     st.markdown("""
-    <style>
-    .profile-card {
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(102, 126, 234, 0.1);
-        display: flex; /* Use flexbox for alignment */
-        flex-direction: column; /* Stack items vertically */
-        justify-content: flex-start; /* Align content to the top */
-        height: 100%; /* Make cards in a row have the same height */
-    }
-    .profile-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
-    }
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #667eea;
-        margin-bottom: 1rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .profile-name {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #667eea;
-        margin-bottom: 0.25rem;
-    }
-    .profile-role {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #764ba2;
-        margin-bottom: 1rem;
-    }
-    .profile-bio {
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.6;
-    }
-    </style>
+    <div class="info-box" style="text-align: center; padding: 3rem;">
+        <h3>👥 Team Members</h3>
+        <p style="font-size: 1.2rem; color: #667eea; font-weight: 600; margin: 1.5rem 0;">
+            ABHINAV SUNEESH • IBHAN MUKHERJEE • HARI ASHWIN • SRIJAN GUCHHAIT • OM THAVARI
+        </p>
+        <p style="font-size: 1rem; color: #666; margin-top: 1rem;">
+            (You can add individual profiles, roles, and photos here)
+        </p>
+    </div>
     """, unsafe_allow_html=True)
-
-    # --- ROW 1 ---
-    col1, col2, col3 = st.columns(3, gap="large")
-
-    with col1:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="ABHINAV SUNEESH" class="profile-img">
-            <p class="profile-name">Team Member 1</p>
-            <p class="profile-role">Their Role (e.g., Quantum Lead)</p>
-            <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="IBHAN MUKHERJEE" class="profile-img">
-            <p class="profile-name">Team Member 2</p>
-            <p class="profile-role">Their Role (e.g., Lead Developer)</p>
-            <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="HARI ASHWIN" class="profile-img">
-            <p class="profile-name">Team Member 3</p>
-            <p class="profile-role">Their Role (e.g., UI/UX Designer)</p>
-            <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # --- ROW 2 (Centered) ---
-    _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
-
-    with col4:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="SRIJAN GUCHHAIT" class="profile-img">
-            <p class="profile-name">Team Member 4</p>
-            <p class="profile-role">Their Role (e.g., Content Writer)</p>
-            <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col5:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/0bdaa61990a82953b01a638cf518f7042430652e/IMG-20251106-WA0008.jpg" class="profile-img">
-            <p class="profile-name">OM THAVARI</p>
-            <p class="profile-role">Their Role (e.g., Project Manager)</p>
-            <p class="profile-bio">
-                A short, engaging biography about this team member, their contributions to the project, 
-                and their passion for quantum computing.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
 
 # Footer
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; color: #666; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
-        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Built with ❤️ by an awesome team</p>
+        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made with ❤️ by quantum enthusiasts for curiosity, not only for credits 😉</p>
         <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | © 2024</p>
     </div>
 """, unsafe_allow_html=True)

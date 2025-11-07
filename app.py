@@ -1216,7 +1216,7 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
             <p class="profile-name">SRIJAN GUCHHAIT</p>
-            <p class="profile-role">BB84 Explainer & Ideal Conditions Specialist</p>
+            <p class="profile-role">BB84 Idealist</p>
             <p class="profile-bio">
                 Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
             </p>

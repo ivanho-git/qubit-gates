@@ -470,6 +470,68 @@ with tab1:
         <p>{gate_info_dict.get(gate, "")}</p>
         </div>
         """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
+            <p class="profile-name">IBHAN MUKHERJEE</p>
+            <p class="profile-role">How To Catch the Thief?</p>
+            <p class="profile-bio">
+                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
+            <p class="profile-name">HARI ASHWIN</p>
+            <p class="profile-role">Qubits and Gates Expert</p>
+            <p class="profile-bio">
+                The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
+
+    with col4:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
+            <p class="profile-name">SRIJAN GUCHHAIT</p>
+            <p class="profile-role">BB84 Idealist</p>
+            <p class="profile-bio">
+                Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col5:
+        st.markdown("""
+        <div class="profile-card">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
+            <p class="profile-name">OM THAVARI</p>
+            <p class="profile-role">Faraday Rotator Technician</p>
+            <p class="profile-bio">
+                Manages optical components, ensuring polarization rotations are precise and consistent.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# Footer
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("""
+    <div style='text-align: center; color: var(--text-secondary); padding: 2rem 0; border-top: 2px solid var(--border-color); margin-top: 3rem;'>
+        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
+        <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | Ibhan Mukherjee</p>
+    </div>
+""", unsafe_allow_html=True)>
+        """, unsafe_allow_html=True)
         
         st.markdown('</div>', unsafe_allow_html=True)
     
@@ -715,10 +777,199 @@ with tab2:
 
 with tab3:
     st.markdown('<p class="section-header">Faraday Rotator Simulator</p>', unsafe_allow_html=True)
-    st.info("Faraday Rotator implementation continues with dark mode support...")
+    
+    st.markdown("""
+    <div class="info-box" style="text-align: center;">
+    <h4>🔬 About the Faraday Effect</h4>
+    <p>
+    The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
+    in a magnetic field. This quantum phenomenon is fundamental to optical isolators and magnetic field sensors.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns([1, 2])
+    
+    with col1:
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown("### ⚙️ Physical Parameters")
+        
+        initial_polarization = st.radio(
+            "**Initial Polarization:**",
+            ["Horizontal (|H⟩)", "Vertical (|V⟩)", "Diagonal (+45°)", "Anti-diagonal (-45°)"]
+        )
+        
+        st.markdown("---")
+        
+        verdet_constant = st.slider(
+            "**Verdet Constant (rad/T·m):**",
+            min_value=1.0,
+            max_value=100.0,
+            value=50.0,
+            step=1.0
+        )
+        
+        magnetic_field = st.slider(
+            "**Magnetic Field (Tesla):**",
+            min_value=0.0,
+            max_value=5.0,
+            value=1.0,
+            step=0.1
+        )
+        
+        path_length = st.slider(
+            "**Path Length (meters):**",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.1,
+            step=0.01
+        )
+        
+        faraday_angle = verdet_constant * magnetic_field * path_length
+        faraday_angle_deg = np.rad2deg(faraday_angle) % 360
+        
+        st.markdown(f"""
+        <div class="gradient-box">
+        <h3>🧮 Faraday Rotation</h3>
+        <h2>θ = {faraday_angle_deg:.1f}°</h2>
+        <p>θ = V × B × L = {faraday_angle:.3f} rad</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        show_faraday_animation = st.checkbox("🎬 Animate propagation", value=True, key="faraday_anim")
+        
+        if show_faraday_animation:
+            propagation_steps = st.slider("Steps:", 10, 50, 25, key="faraday_steps")
+            animation_speed = st.slider("Speed:", 1, 10, 5, key="anim_speed")
+        
+        simulate_faraday = st.button("🔬 Run Simulation", use_container_width=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown("### 📊 Polarization Evolution")
+        
+        if simulate_faraday:
+            if initial_polarization == "Horizontal (|H⟩)":
+                initial_angle = 0
+            elif initial_polarization == "Vertical (|V⟩)":
+                initial_angle = 90
+            elif initial_polarization == "Diagonal (+45°)":
+                initial_angle = 45
+            else:
+                initial_angle = -45
+            
+            if show_faraday_animation:
+                angles_through_medium = np.linspace(0, faraday_angle_deg, propagation_steps)
+                distances = np.linspace(0, path_length, propagation_steps)
+                
+                animation_placeholder = st.empty()
+                progress_bar = st.progress(0)
+                
+                import time
+                
+                for i, (rotation_angle, current_distance) in enumerate(zip(angles_through_medium, distances)):
+                    current_pol_angle = initial_angle + rotation_angle
+                    
+                    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                    
+                    # 3D wave visualization
+                    ax1 = plt.subplot(121, projection='3d')
+                    z = np.linspace(0, 2*np.pi, 100)
+                    angle_rad = np.deg2rad(current_pol_angle)
+                    Ex = np.cos(angle_rad) * np.sin(z)
+                    Ey = np.sin(angle_rad) * np.sin(z)
+                    
+                    ax1.plot(Ex, Ey, z, 'b-', linewidth=2.5, label='E-field', alpha=0.8)
+                    
+                    arrow_length = 1.2
+                    ax1.quiver(0, 0, 0, 
+                              arrow_length * np.cos(angle_rad), 
+                              arrow_length * np.sin(angle_rad), 
+                              0,
+                              color='red', arrow_length_ratio=0.3, linewidth=4,
+                              label=f'Pol: {current_pol_angle:.1f}°')
+                    
+                    ax1.set_xlabel('Ex (H)', fontsize=11, fontweight='bold')
+                    ax1.set_ylabel('Ey (V)', fontsize=11, fontweight='bold')
+                    ax1.set_zlabel('Propagation', fontsize=11, fontweight='bold')
+                    ax1.set_title(f'Light Wave\nDistance: {current_distance*100:.1f} cm', 
+                                 fontsize=13, fontweight='bold', color='#667eea')
+                    ax1.set_xlim([-1.5, 1.5])
+                    ax1.set_ylim([-1.5, 1.5])
+                    ax1.set_zlim([0, 2*np.pi])
+                    ax1.legend(loc='upper right', fontsize=9)
+                    ax1.view_init(elev=20, azim=45)
+                    ax1.grid(True, alpha=0.3)
+                    
+                    # Polarization plane view
+                    ax2.set_aspect('equal')
+                    ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, 
+                             fc='gray', ec='gray', alpha=0.3)
+                    ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, 
+                             fc='gray', ec='gray', alpha=0.3)
+                    ax2.text(1.35, 0, 'H', fontsize=13, ha='left', va='center', fontweight='bold')
+                    ax2.text(0, 1.35, 'V', fontsize=13, ha='center', va='bottom', fontweight='bold')
+                    
+                    initial_rad = np.deg2rad(initial_angle)
+                    ax2.arrow(0, 0, np.cos(initial_rad), np.sin(initial_rad), 
+                             head_width=0.15, head_length=0.15, 
+                             fc='blue', ec='blue', alpha=0.3, linewidth=2.5,
+                             label=f'Initial: {initial_angle}°')
+                    
+                    ax2.arrow(0, 0, np.cos(angle_rad), np.sin(angle_rad), 
+                             head_width=0.15, head_length=0.15, 
+                             fc='red', ec='red', alpha=1.0, linewidth=3.5,
+                             label=f'Current: {current_pol_angle:.1f}°')
+                    
+                    if rotation_angle > 0:
+                        arc_angles = np.linspace(initial_rad, angle_rad, 50)
+                        arc_x = 0.5 * np.cos(arc_angles)
+                        arc_y = 0.5 * np.sin(arc_angles)
+                        ax2.plot(arc_x, arc_y, 'g--', linewidth=2.5, alpha=0.8)
+                    
+                    ax2.set_xlim([-1.6, 1.6])
+                    ax2.set_ylim([-1.6, 1.6])
+                    ax2.set_title(f'Polarization Plane\nB = {magnetic_field:.1f} T', 
+                                 fontsize=13, fontweight='bold', color='#667eea')
+                    ax2.legend(loc='upper right', fontsize=10)
+                    ax2.grid(True, alpha=0.3, linestyle='--')
+                    ax2.axhline(y=0, color='k', linewidth=0.8, alpha=0.3)
+                    ax2.axvline(x=0, color='k', linewidth=0.8, alpha=0.3)
+                    
+                    plt.tight_layout()
+                    
+                    with animation_placeholder.container():
+                        col_a, col_b, col_c = st.columns(3)
+                        with col_a:
+                            st.metric("Distance", f"{current_distance*100:.1f} cm")
+                        with col_b:
+                            st.metric("Rotation", f"{rotation_angle:.1f}°")
+                        with col_c:
+                            st.metric("Polarization", f"{current_pol_angle:.1f}°")
+                        
+                        st.pyplot(fig)
+                    
+                    plt.close()
+                    progress_bar.progress((i + 1) / propagation_steps)
+                    time.sleep(0.1 / animation_speed)
+                
+                progress_bar.empty()
+                st.success(f"✅ Polarization rotated from {initial_angle}° to {initial_angle + faraday_angle_deg:.1f}°")
+            else:
+                st.info("Static visualization mode - enable animation for full experience")
+        else:
+            st.info("👆 Configure parameters and click 'Run Simulation'")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
 with tab4:
     st.markdown('<p class="section-header">BB84 Quantum Key Distribution</p>', unsafe_allow_html=True)
+    
+    # Hero section
     st.markdown("""
     <div class="gradient-box">
         <h1 style='font-size: 2.8rem; margin-bottom: 1rem;'>🔐 BB84 Protocol</h1>
@@ -728,6 +979,155 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
+    # Introduction
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="info-box" style="height: 100%;">
+        <h3 style="color: #667eea !important;">📚 What is BB84?</h3>
+        <p>
+        <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
+        It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
+        any eavesdropper, even one with unlimited computing power.
+        </p>
+        <p>
+        The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
+        the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="info-box" style="height: 100%;">
+        <h3 style="color: #667eea !important;">🎯 Key Features</h3>
+        <ul style="font-size: 1.05rem;">
+            <li><strong>Unconditional Security:</strong> Based on quantum physics, not computational complexity</li>
+            <li><strong>Eavesdropping Detection:</strong> Any interception attempt is detectable</li>
+            <li><strong>Perfect Forward Secrecy:</strong> Each session uses a new quantum key</li>
+            <li><strong>Photon Polarization:</strong> Uses quantum states of light particles</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # How it works
+    st.markdown("""
+    <div class="info-box" style="text-align: center;">
+        <h3 style='color: #667eea; margin-bottom: 1rem; font-size: 1.8rem;'>🔬 How Does BB84 Work?</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Protocol steps
+    steps_col1, steps_col2 = st.columns(2)
+    
+    with steps_col1:
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">1️⃣ Quantum Transmission</h4>
+        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">2️⃣ Random Measurement</h4>
+        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">3️⃣ Basis Reconciliation</h4>
+        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with steps_col2:
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">4️⃣ Error Checking</h4>
+        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">5️⃣ Privacy Amplification</h4>
+        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="info-box">
+        <h4 style="color: #764ba2 !important;">6️⃣ Secure Key</h4>
+        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Two bases explanation
+    st.markdown("""
+    <div class="info-box" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);">
+        <h4 style='color: #856404; margin-bottom: 1rem; font-size: 1.5rem;'>💡 The Two Bases</h4>
+        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;'>
+            <div style='background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 10px;'>
+                <strong style='color: #856404; font-size: 1.1rem;'>Rectilinear Basis (+):</strong><br>
+                <span style='color: #000;'>Horizontal (|0⟩) and Vertical (|1⟩) polarizations</span>
+            </div>
+            <div style='background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 10px;'>
+                <strong style='color: #856404; font-size: 1.1rem;'>Diagonal Basis (×):</strong><br>
+                <span style='color: #000;'>+45° (|0⟩) and -45° (|1⟩) polarizations</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Security section
+    st.markdown("""
+    <div class="info-box" style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);">
+        <h4 style='color: #0c5460; margin-bottom: 1rem; font-size: 1.5rem;'>🛡️ Why is BB84 Unbreakable?</h4>
+        <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>Heisenberg Uncertainty Principle:</strong> Measuring a quantum state in the wrong basis disturbs it.</p>
+        <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>No-Cloning Theorem:</strong> It's impossible to create identical copies of unknown quantum states.</p>
+        <p style='margin-bottom: 0; color: #000;'><strong style='color: #0c5460;'>Observable Disturbance:</strong> Any eavesdropping attempt introduces detectable errors in the transmission.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Applications
+    st.markdown("""
+    <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);">
+        <h4 style='color: #155724; margin-bottom: 1rem; font-size: 1.5rem;'>🌍 Real-World Applications</h4>
+        <ul style='margin-bottom: 0; color: #000;'>
+            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Banking & Finance:</strong> Securing high-value financial transactions</li>
+            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Government Communications:</strong> Protecting classified information</li>
+            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Quantum Internet:</strong> Building the foundation for quantum networks</li>
+            <li><strong style='color: #155724;'>Satellite QKD:</strong> China's Micius satellite demonstrated space-based BB84</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Call to action
+    st.markdown("""
+    <div class="feature-box" style="text-align: center; margin: 3rem 0;">
+        <h2 style='font-size: 2.2rem; margin-bottom: 1rem;'>
+            🧪 Ready to Experience BB84 in Action?
+        </h2>
+        <p style='font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.95;'>
+            Try our interactive BB84 simulator and see quantum key distribution working in real-time!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Center the button
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("""
@@ -737,6 +1137,29 @@ with tab4:
                 </button>
             </a>
         """, unsafe_allow_html=True)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Additional resources
+    with st.expander("📖 Learn More About BB84"):
+        st.markdown("""
+        ### Further Reading
+        
+        - **Original Paper:** Bennett, C. H., & Brassard, G. (1984). "Quantum cryptography: Public key distribution and coin tossing"
+        - **Key Concepts:** Quantum mechanics, photon polarization, basis reconciliation, privacy amplification
+        - **Modern Implementations:** Commercial QKD systems are now available with distances up to 100+ km
+        
+        ### Historical Context
+        
+        BB84 was proposed by Charles Bennett and Gilles Brassard in 1984, making it one of the earliest applications 
+        of quantum mechanics to information theory. It laid the foundation for the entire field of quantum cryptography.
+        
+        ### Recent Achievements
+        
+        - **2017:** China's Micius satellite achieved intercontinental quantum key distribution
+        - **2020:** Commercial quantum networks deployed in major cities worldwide
+        - **2023:** Record-breaking QKD distances achieved with trusted node networks
+        """)
 
 with tab5:
     st.markdown('<p class="section-header">Meet The Team</p>', unsafe_allow_html=True)

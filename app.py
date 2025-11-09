@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Page configuration
+# Page configurationhttps://github.com/ivanho-git/qubit-gates/edit/main/app.py
 st.set_page_config(
     page_title="Quantum Gate Simulator",
     page_icon="⚛️",
@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Dark Mode Compatible CSS
+# Premium Custom CSS
 st.markdown("""
     <style>
     /* Import Google Fonts */
@@ -26,49 +26,16 @@ st.markdown("""
         font-family: 'Poppins', sans-serif;
     }
     
-    /* Detect dark mode */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-primary: #1a1a2e;
-            --bg-secondary: #16213e;
-            --bg-card: #0f3460;
-            --text-primary: #eaeaea;
-            --text-secondary: #b8b8b8;
-            --accent-1: #667eea;
-            --accent-2: #764ba2;
-            --border-color: rgba(102, 126, 234, 0.3);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --info-bg: #1e3a5f;
-            --info-text: #e0e0e0;
-        }
-    }
-    
-    @media (prefers-color-scheme: light) {
-        :root {
-            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --bg-secondary: rgba(255, 255, 255, 0.95);
-            --bg-card: #ffffff;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --accent-1: #667eea;
-            --accent-2: #764ba2;
-            --border-color: rgba(102, 126, 234, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --info-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --info-text: #000000;
-        }
-    }
-    
     .main {
-        background: var(--bg-primary);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         background-attachment: fixed;
     }
     
     .block-container {
         padding: 2rem 3rem;
-        background: var(--bg-secondary);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 20px;
-        box-shadow: 0 20px 60px var(--shadow-color);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         margin: 2rem auto;
         backdrop-filter: blur(10px);
     }
@@ -87,7 +54,7 @@ st.markdown("""
     
     .subtitle {
         text-align: center;
-        color: var(--text-secondary);
+        color: #666;
         font-size: 1.2rem;
         margin-bottom: 2rem;
         font-weight: 300;
@@ -101,17 +68,17 @@ st.markdown("""
     /* Tabs Styling */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
-        background: var(--info-bg);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         padding: 1rem;
         border-radius: 15px;
-        box-shadow: inset 0 2px 10px var(--shadow-color);
+        box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
     }
     
     .stTabs [data-baseweb="tab"] {
         height: 60px;
-        background: var(--bg-card);
+        background: white;
         border-radius: 10px;
-        color: var(--text-primary);
+        color: #333;
         font-weight: 600;
         font-size: 1.1rem;
         padding: 0 2rem;
@@ -156,12 +123,12 @@ st.markdown("""
     
     /* Info Boxes */
     .info-box {
-        background: var(--info-bg);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         padding: 1.5rem;
         border-radius: 15px;
         margin: 1rem 0;
-        color: var(--info-text);
-        box-shadow: 0 5px 20px var(--shadow-color);
+        color: #000000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         border-left: 5px solid #667eea;
         transition: all 0.3s ease;
     }
@@ -172,7 +139,7 @@ st.markdown("""
     }
     
     .info-box h3, .info-box h4, .info-box p, .info-box ul, .info-box li {
-        color: var(--info-text) !important;
+        color: #000000 !important;
     }
     
     .info-box h3 {
@@ -191,12 +158,12 @@ st.markdown("""
     
     /* Card Styling */
     .card {
-        background: var(--bg-card);
+        background: white;
         padding: 2rem;
         border-radius: 15px;
-        box-shadow: 0 10px 30px var(--shadow-color);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         margin: 1rem 0;
-        border: 1px solid var(--border-color);
+        border: 1px solid rgba(102, 126, 234, 0.1);
         transition: all 0.3s ease;
     }
     
@@ -222,14 +189,9 @@ st.markdown("""
     
     /* Select boxes and inputs */
     .stSelectbox, .stRadio {
-        background: var(--bg-card);
+        background: white;
         border-radius: 10px;
         padding: 0.5rem;
-    }
-    
-    /* Text color for labels */
-    label, .stMarkdown p, .stMarkdown {
-        color: var(--text-primary) !important;
     }
     
     /* Sliders */
@@ -242,10 +204,6 @@ st.markdown("""
         font-size: 1.8rem;
         font-weight: 700;
         color: #667eea;
-    }
-    
-    [data-testid="stMetricLabel"] {
-        color: var(--text-primary) !important;
     }
     
     /* Progress bar */
@@ -315,69 +273,10 @@ st.markdown("""
     
     /* Expander */
     .streamlit-expanderHeader {
-        background: var(--info-bg);
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         border-radius: 10px;
         font-weight: 600;
-        color: #667eea !important;
-    }
-    
-    /* Info/Success/Warning boxes */
-    .stAlert {
-        background: var(--bg-card) !important;
-        color: var(--text-primary) !important;
-        border-left-color: #667eea !important;
-    }
-    
-    /* Profile cards for dark mode */
-    .profile-card {
-        background: var(--bg-card);
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px var(--shadow-color);
-        text-align: center;
-        transition: all 0.3s ease;
-        border: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        height: 100%;
-    }
-    
-    .profile-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
-    }
-    
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #667eea;
-        margin-bottom: 1rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .profile-name {
-        font-size: 1.5rem;
-        font-weight: 700;
         color: #667eea;
-        margin-bottom: 0.25rem;
-    }
-    
-    .profile-role {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #764ba2;
-        margin-bottom: 1rem;
-    }
-    
-    .profile-bio {
-        font-size: 0.95rem;
-        color: var(--text-secondary);
-        line-height: 1.6;
     }
     
     /* Hide Streamlit branding */
@@ -391,10 +290,6 @@ st.markdown("""
         }
         .block-container {
             padding: 1rem;
-        }
-        .stTabs [data-baseweb="tab"] {
-            font-size: 0.9rem;
-            padding: 0 1rem;
         }
     }
     </style>
@@ -465,72 +360,10 @@ with tab1:
         
         st.markdown(f"""
         <div class="info-box">
-        <h4>&#128214; Gate Information</h4>
+        <h4>📖 Gate Information</h4>
         <p><strong>{gate}</strong></p>
         <p>{gate_info_dict.get(gate, "")}</p>
         </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
-            <p class="profile-name">IBHAN MUKHERJEE</p>
-            <p class="profile-role">How To Catch the Thief?</p>
-            <p class="profile-bio">
-                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
-            <p class="profile-name">HARI ASHWIN</p>
-            <p class="profile-role">Qubits and Gates Expert</p>
-            <p class="profile-bio">
-                The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
-
-    with col4:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
-            <p class="profile-name">SRIJAN GUCHHAIT</p>
-            <p class="profile-role">BB84 Idealist</p>
-            <p class="profile-bio">
-                Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col5:
-        st.markdown("""
-        <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
-            <p class="profile-name">OM THAVARI</p>
-            <p class="profile-role">Faraday Rotator Technician</p>
-            <p class="profile-bio">
-                Manages optical components, ensuring polarization rotations are precise and consistent.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-# Footer
-st.markdown("<br>", unsafe_allow_html=True)
-st.markdown("""
-    <div style='text-align: center; color: var(--text-secondary); padding: 2rem 0; border-top: 2px solid var(--border-color); margin-top: 3rem;'>
-        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
-        <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | Ibhan Mukherjee</p>
-    </div>
-""", unsafe_allow_html=True)>
         """, unsafe_allow_html=True)
         
         st.markdown('</div>', unsafe_allow_html=True)
@@ -644,10 +477,10 @@ with tab2:
         
         st.markdown(f"""
         <div class="info-box">
-        <h4>&#128208; Angle Information</h4>
-        <p><strong>Degrees:</strong> {angle_degrees}&deg;</p>
+        <h4>📐 Angle Information</h4>
+        <p><strong>Degrees:</strong> {angle_degrees}°</p>
         <p><strong>Radians:</strong> {angle_radians:.4f} rad</p>
-        <p><strong>In terms of &pi;:</strong> {angle_degrees/180:.2f}&pi;</p>
+        <p><strong>In terms of π:</strong> {angle_degrees/180:.2f}π</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -772,9 +605,6 @@ with tab2:
         
         st.markdown('</div>', unsafe_allow_html=True)
 
-# Continue with remaining tabs (tab3, tab4, tab5) - keeping the same structure but using CSS variables
-# The rest of the code remains the same as original...
-
 with tab3:
     st.markdown('<p class="section-header">Faraday Rotator Simulator</p>', unsafe_allow_html=True)
     
@@ -830,9 +660,9 @@ with tab3:
         
         st.markdown(f"""
         <div class="gradient-box">
-        <h3>&#129518; Faraday Rotation</h3>
-        <h2>&theta; = {faraday_angle_deg:.1f}&deg;</h2>
-        <p>&theta; = V &times; B &times; L = {faraday_angle:.3f} rad</p>
+        <h3>🧮 Faraday Rotation</h3>
+        <h2>θ = {faraday_angle_deg:.1f}°</h2>
+        <p>θ = V × B × L = {faraday_angle:.3f} rad</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -907,6 +737,8 @@ with tab3:
                     
                     # Polarization plane view
                     ax2.set_aspect('equal')
+                    
+                    # Reference axes
                     ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, 
                              fc='gray', ec='gray', alpha=0.3)
                     ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, 
@@ -914,22 +746,29 @@ with tab3:
                     ax2.text(1.35, 0, 'H', fontsize=13, ha='left', va='center', fontweight='bold')
                     ax2.text(0, 1.35, 'V', fontsize=13, ha='center', va='bottom', fontweight='bold')
                     
+                    # Initial polarization
                     initial_rad = np.deg2rad(initial_angle)
                     ax2.arrow(0, 0, np.cos(initial_rad), np.sin(initial_rad), 
                              head_width=0.15, head_length=0.15, 
                              fc='blue', ec='blue', alpha=0.3, linewidth=2.5,
                              label=f'Initial: {initial_angle}°')
                     
+                    # Current polarization
                     ax2.arrow(0, 0, np.cos(angle_rad), np.sin(angle_rad), 
                              head_width=0.15, head_length=0.15, 
                              fc='red', ec='red', alpha=1.0, linewidth=3.5,
                              label=f'Current: {current_pol_angle:.1f}°')
                     
+                    # Rotation arc
                     if rotation_angle > 0:
                         arc_angles = np.linspace(initial_rad, angle_rad, 50)
                         arc_x = 0.5 * np.cos(arc_angles)
                         arc_y = 0.5 * np.sin(arc_angles)
                         ax2.plot(arc_x, arc_y, 'g--', linewidth=2.5, alpha=0.8)
+                        ax2.text(0, -0.8, f'Rotation: {rotation_angle:.1f}°', 
+                                fontsize=12, ha='center', color='green', 
+                                fontweight='bold', bbox=dict(boxstyle='round', 
+                                facecolor='lightgreen', alpha=0.5))
                     
                     ax2.set_xlim([-1.6, 1.6])
                     ax2.set_ylim([-1.6, 1.6])
@@ -945,7 +784,8 @@ with tab3:
                     with animation_placeholder.container():
                         col_a, col_b, col_c = st.columns(3)
                         with col_a:
-                            st.metric("Distance", f"{current_distance*100:.1f} cm")
+                            st.metric("Distance", f"{current_distance*100:.1f} cm", 
+                                     f"{(current_distance/path_length)*100:.0f}%")
                         with col_b:
                             st.metric("Rotation", f"{rotation_angle:.1f}°")
                         with col_c:
@@ -959,8 +799,117 @@ with tab3:
                 
                 progress_bar.empty()
                 st.success(f"✅ Polarization rotated from {initial_angle}° to {initial_angle + faraday_angle_deg:.1f}°")
+                
+                # Quantum state representation
+                st.markdown("---")
+                st.markdown("#### ⚛️ Quantum State Representation")
+                
+                qc_initial = QuantumCircuit(1)
+                if initial_polarization == "Horizontal (|H⟩)":
+                    pass
+                elif initial_polarization == "Vertical (|V⟩)":
+                    qc_initial.x(0)
+                elif initial_polarization == "Diagonal (+45°)":
+                    qc_initial.h(0)
+                else:
+                    qc_initial.x(0)
+                    qc_initial.h(0)
+                
+                initial_state = Statevector.from_instruction(qc_initial)
+                rotation_qc = QuantumCircuit(1)
+                rotation_qc.rz(2 * faraday_angle, 0)
+                final_state = initial_state.evolve(rotation_qc)
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Initial State**")
+                    fig = plot_bloch_multivector(initial_state)
+                    st.pyplot(fig)
+                    plt.close()
+                with col2:
+                    st.markdown("**Final State**")
+                    fig = plot_bloch_multivector(final_state)
+                    st.pyplot(fig)
+                    plt.close()
+                
             else:
-                st.info("Static visualization mode - enable animation for full experience")
+                # Static visualization
+                final_pol_angle = initial_angle + faraday_angle_deg
+                
+                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+                
+                # 3D wave
+                ax1 = plt.subplot(121, projection='3d')
+                z = np.linspace(0, 2*np.pi, 100)
+                angle_rad = np.deg2rad(final_pol_angle)
+                Ex = np.cos(angle_rad) * np.sin(z)
+                Ey = np.sin(angle_rad) * np.sin(z)
+                
+                ax1.plot(Ex, Ey, z, 'b-', linewidth=2.5, alpha=0.8)
+                arrow_length = 1.2
+                ax1.quiver(0, 0, 0, 
+                          arrow_length * np.cos(angle_rad), 
+                          arrow_length * np.sin(angle_rad), 
+                          0,
+                          color='red', arrow_length_ratio=0.3, linewidth=4)
+                
+                ax1.set_xlabel('Ex (H)', fontsize=11, fontweight='bold')
+                ax1.set_ylabel('Ey (V)', fontsize=11, fontweight='bold')
+                ax1.set_zlabel('Propagation', fontsize=11, fontweight='bold')
+                ax1.set_title(f'Final Light Wave\nAfter {path_length*100:.1f} cm', 
+                             fontsize=13, fontweight='bold', color='#667eea')
+                ax1.set_xlim([-1.5, 1.5])
+                ax1.set_ylim([-1.5, 1.5])
+                ax1.set_zlim([0, 2*np.pi])
+                ax1.view_init(elev=20, azim=45)
+                ax1.grid(True, alpha=0.3)
+                
+                # Polarization comparison
+                ax2.set_aspect('equal')
+                ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, 
+                         fc='gray', ec='gray', alpha=0.3)
+                ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, 
+                         fc='gray', ec='gray', alpha=0.3)
+                ax2.text(1.35, 0, 'H', fontsize=13, fontweight='bold')
+                ax2.text(0, 1.35, 'V', fontsize=13, fontweight='bold')
+                
+                # Initial
+                initial_rad = np.deg2rad(initial_angle)
+                ax2.arrow(0, 0, np.cos(initial_rad), np.sin(initial_rad), 
+                         head_width=0.15, head_length=0.15, 
+                         fc='blue', ec='blue', alpha=0.3, linewidth=2.5,
+                         label=f'Initial: {initial_angle}°')
+                
+                # Final
+                ax2.arrow(0, 0, np.cos(angle_rad), np.sin(angle_rad), 
+                         head_width=0.15, head_length=0.15, 
+                         fc='red', ec='red', linewidth=3.5,
+                         label=f'Final: {final_pol_angle:.1f}°')
+                
+                # Arc
+                arc_angles = np.linspace(initial_rad, angle_rad, 50)
+                arc_x = 0.5 * np.cos(arc_angles)
+                arc_y = 0.5 * np.sin(arc_angles)
+                ax2.plot(arc_x, arc_y, 'g--', linewidth=2.5, alpha=0.8)
+                ax2.text(0, -0.8, f'Rotation: {faraday_angle_deg:.1f}°', 
+                        fontsize=12, ha='center', color='green', fontweight='bold',
+                        bbox=dict(boxstyle='round', facecolor='lightgreen', alpha=0.5))
+                
+                ax2.set_xlim([-1.6, 1.6])
+                ax2.set_ylim([-1.6, 1.6])
+                ax2.set_title(f'Polarization Rotation\nB = {magnetic_field:.1f} T, L = {path_length*100:.1f} cm', 
+                             fontsize=13, fontweight='bold', color='#667eea')
+                ax2.legend(loc='upper right', fontsize=10)
+                ax2.grid(True, alpha=0.3, linestyle='--')
+                ax2.axhline(y=0, color='k', linewidth=0.8, alpha=0.3)
+                ax2.axvline(x=0, color='k', linewidth=0.8, alpha=0.3)
+                
+                plt.tight_layout()
+                st.pyplot(fig)
+                plt.close()
+                
+                st.success(f"✅ Polarization rotated by {faraday_angle_deg:.1f}°")
+        
         else:
             st.info("👆 Configure parameters and click 'Run Simulation'")
         
@@ -986,12 +935,12 @@ with tab4:
         st.markdown("""
         <div class="info-box" style="height: 100%;">
         <h3 style="color: #667eea !important;">📚 What is BB84?</h3>
-        <p>
+        <p style="color: #000000;">
         <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
         It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
         any eavesdropper, even one with unlimited computing power.
         </p>
-        <p>
+        <p style="color: #000000;">
         The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
         the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
         </p>
@@ -1002,7 +951,7 @@ with tab4:
         st.markdown("""
         <div class="info-box" style="height: 100%;">
         <h3 style="color: #667eea !important;">🎯 Key Features</h3>
-        <ul style="font-size: 1.05rem;">
+        <ul style="font-size: 1.05rem; color: #000000;">
             <li><strong>Unconditional Security:</strong> Based on quantum physics, not computational complexity</li>
             <li><strong>Eavesdropping Detection:</strong> Any interception attempt is detectable</li>
             <li><strong>Perfect Forward Secrecy:</strong> Each session uses a new quantum key</li>
@@ -1015,7 +964,9 @@ with tab4:
     
     # How it works
     st.markdown("""
-    <div class="info-box" style="text-align: center;">
+    <div style='background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); 
+                padding: 2rem; border-radius: 15px; border-left: 5px solid #667eea;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
         <h3 style='color: #667eea; margin-bottom: 1rem; font-size: 1.8rem;'>🔬 How Does BB84 Work?</h3>
     </div>
     """, unsafe_allow_html=True)
@@ -1025,60 +976,62 @@ with tab4:
     
     with steps_col1:
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">1️⃣ Quantum Transmission</h4>
-        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
+        <p style="color: #000000;">Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">2️⃣ Random Measurement</h4>
-        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
+        <p style="color: #000000;">Bob randomly chooses bases to measure the received photons, recording the results.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">3️⃣ Basis Reconciliation</h4>
-        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
+        <p style="color: #000000;">Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
         </div>
         """, unsafe_allow_html=True)
     
     with steps_col2:
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">4️⃣ Error Checking</h4>
-        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
+        <p style="color: #000000;">They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">5️⃣ Privacy Amplification</h4>
-        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
+        <p style="color: #000000;">The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class="info-box">
+        <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
         <h4 style="color: #764ba2 !important;">6️⃣ Secure Key</h4>
-        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
+        <p style="color: #000000;">Alice and Bob now share an identical, secret key for encrypting communications!</p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Two bases explanation
+    # Two bases
     st.markdown("""
-    <div class="info-box" style="background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);">
+    <div style='background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%); 
+                padding: 1.8rem; border-radius: 15px; border-left: 5px solid #ffc107; 
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
         <h4 style='color: #856404; margin-bottom: 1rem; font-size: 1.5rem;'>💡 The Two Bases</h4>
         <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;'>
-            <div style='background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 10px;'>
+            <div style='background: white; padding: 1rem; border-radius: 10px;'>
                 <strong style='color: #856404; font-size: 1.1rem;'>Rectilinear Basis (+):</strong><br>
                 <span style='color: #000;'>Horizontal (|0⟩) and Vertical (|1⟩) polarizations</span>
             </div>
-            <div style='background: rgba(255,255,255,0.7); padding: 1rem; border-radius: 10px;'>
+            <div style='background: white; padding: 1rem; border-radius: 10px;'>
                 <strong style='color: #856404; font-size: 1.1rem;'>Diagonal Basis (×):</strong><br>
                 <span style='color: #000;'>+45° (|0⟩) and -45° (|1⟩) polarizations</span>
             </div>
@@ -1086,11 +1039,11 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    
     # Security section
     st.markdown("""
-    <div class="info-box" style="background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);">
+    <div style='background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); 
+                padding: 1.8rem; border-radius: 15px; border-left: 5px solid #0c5460; 
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
         <h4 style='color: #0c5460; margin-bottom: 1rem; font-size: 1.5rem;'>🛡️ Why is BB84 Unbreakable?</h4>
         <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>Heisenberg Uncertainty Principle:</strong> Measuring a quantum state in the wrong basis disturbs it.</p>
         <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>No-Cloning Theorem:</strong> It's impossible to create identical copies of unknown quantum states.</p>
@@ -1098,11 +1051,11 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    
     # Applications
     st.markdown("""
-    <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);">
+    <div style='background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
+                padding: 1.8rem; border-radius: 15px; border-left: 5px solid #155724; 
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
         <h4 style='color: #155724; margin-bottom: 1rem; font-size: 1.5rem;'>🌍 Real-World Applications</h4>
         <ul style='margin-bottom: 0; color: #000;'>
             <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Banking & Finance:</strong> Securing high-value financial transactions</li>
@@ -1112,8 +1065,6 @@ with tab4:
         </ul>
     </div>
     """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
     
     # Call to action
     st.markdown("""
@@ -1165,6 +1116,58 @@ with tab5:
     st.markdown('<p class="section-header">Meet The Team</p>', unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>The innovators dedicated to making quantum concepts accessible to all.</p>", unsafe_allow_html=True)
 
+    # Custom CSS for team profiles
+    st.markdown("""
+    <style>
+    .profile-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        display: flex; /* Use flexbox for alignment */
+        flex-direction: column; /* Stack items vertically */
+        justify-content: flex-start; /* Align content to the top */
+        height: 100%; /* Make cards in a row have the same height */
+    }
+    .profile-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+    }
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #667eea;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 0.25rem;
+    }
+    .profile-role {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #764ba2;
+        margin-bottom: 1rem;
+    }
+    .profile-bio {
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # --- ROW 1 ---
     col1, col2, col3 = st.columns(3, gap="large")
 
     with col1:
@@ -1186,7 +1189,7 @@ with tab5:
             <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">How To Catch the Thief?</p>
             <p class="profile-bio">
-                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
+                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions..
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -1205,6 +1208,7 @@ with tab5:
     
     st.markdown("<br>", unsafe_allow_html=True)
 
+    # --- ROW 2 (Centered) ---
     _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
 
     with col4:
@@ -1226,15 +1230,16 @@ with tab5:
             <p class="profile-name">OM THAVARI</p>
             <p class="profile-role">Faraday Rotator Technician</p>
             <p class="profile-bio">
-                Manages optical components, ensuring polarization rotations are precise and consistent.
+                Manages optical components, ensuring polarization rotations are precise and consistent..
             </p>
         </div>
         """, unsafe_allow_html=True)
 
+
 # Footer
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; color: var(--text-secondary); padding: 2rem 0; border-top: 2px solid var(--border-color); margin-top: 3rem;'>
+    <div style='text-align: center; color: #666; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
         <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
         <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | Ibhan Mukherjee</p>
     </div>

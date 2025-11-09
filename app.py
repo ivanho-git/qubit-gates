@@ -645,9 +645,9 @@ with tab2:
         st.markdown(f"""
         <div class="info-box">
         <h4>&#128208; Angle Information</h4>
-        <p><strong>Degrees:</strong> {angle_degrees}°</p>
+        <p><strong>Degrees:</strong> {angle_degrees}&deg;</p>
         <p><strong>Radians:</strong> {angle_radians:.4f} rad</p>
-        <p><strong>In terms of π:</strong> {angle_degrees/180:.2f}π</p>
+        <p><strong>In terms of &pi;:</strong> {angle_degrees/180:.2f}&pi;</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -831,8 +831,8 @@ with tab3:
         st.markdown(f"""
         <div class="gradient-box">
         <h3>&#129518; Faraday Rotation</h3>
-        <h2>θ = {faraday_angle_deg:.1f}°</h2>
-        <p>θ = V × B × L = {faraday_angle:.3f} rad</p>
+        <h2>&theta; = {faraday_angle_deg:.1f}&deg;</h2>
+        <p>&theta; = V &times; B &times; L = {faraday_angle:.3f} rad</p>
         </div>
         """, unsafe_allow_html=True)
         

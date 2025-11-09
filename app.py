@@ -465,7 +465,7 @@ with tab1:
         
         st.markdown(f"""
         <div class="info-box">
-        <h4>📖 Gate Information</h4>
+        <h4>&#128214; Gate Information</h4>
         <p><strong>{gate}</strong></p>
         <p>{gate_info_dict.get(gate, "")}</p>
         </div>
@@ -644,7 +644,7 @@ with tab2:
         
         st.markdown(f"""
         <div class="info-box">
-        <h4>📐 Angle Information</h4>
+        <h4>&#128208; Angle Information</h4>
         <p><strong>Degrees:</strong> {angle_degrees}°</p>
         <p><strong>Radians:</strong> {angle_radians:.4f} rad</p>
         <p><strong>In terms of π:</strong> {angle_degrees/180:.2f}π</p>
@@ -830,7 +830,7 @@ with tab3:
         
         st.markdown(f"""
         <div class="gradient-box">
-        <h3>🧮 Faraday Rotation</h3>
+        <h3>&#129518; Faraday Rotation</h3>
         <h2>θ = {faraday_angle_deg:.1f}°</h2>
         <p>θ = V × B × L = {faraday_angle:.3f} rad</p>
         </div>

@@ -1097,7 +1097,7 @@ with tab5:
     with col2:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/WhatsApp%20Image%202025-11-10%20at%2010.34.58%20AM.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">How To Catch the Thief?</p>
             <p class="profile-bio">

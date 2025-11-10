@@ -592,7 +592,8 @@ with tab3:
     The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
     in a magnetic field. This quantum phenomenon is fundamental to optical isolators and magnetic field sensors.
     A key feature is its <strong>non-reciprocal nature</strong>: light rotating in one direction continues 
-    rotating the same way on the return path, unlike normal optical rotators.
+    rotating the same way on the return path, unlike normal optical rotators. This property makes it ideal 
+    for <strong>aligning photon polarization</strong> to specific bases in quantum key distribution (BB84).
     </p>
     </div>
     """, unsafe_allow_html=True)
@@ -715,6 +716,550 @@ with tab3:
             
             st.pyplot(fig_comp)
             plt.close()
+    
+    st.markdown("---")
+    
+    # Add explanation section
+    st.markdown("""
+    <div class="content-box">
+        <h4>📚 What You're Seeing in the Simulation</h4>
+        <p style="margin-bottom: 1rem;">
+        When you run the Faraday Rotator simulation below, here's what each visualization shows:
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    exp_col1, exp_col2 = st.columns(2)
+    
+    with exp_col1:
+        st.markdown("""
+        <div class="info-box">
+        <h4>🌊 Left Panel: 3D Light Wave</h4>
+        <ul>
+            <li><strong>Blue spiral:</strong> The electric field oscillating as light propagates</li>
+            <li><strong>Red arrow:</strong> The current polarization direction</li>
+            <li><strong>Z-axis:</strong> Direction of light travel through the material</li>
+            <li><strong>What it shows:</strong> How the polarization plane twists as light moves through the magnetic field</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with exp_col2:
+        st.markdown("""
+        <div class="info-box">
+        <h4>🎯 Right Panel: Polarization Plane View</h4>
+        <ul>
+            <li><strong>Blue arrow:</strong> Initial polarization when light enters</li>
+            <li><strong>Red arrow:</strong> Current/final polarization state</li>
+            <li><strong>Green arc:</strong> The rotation path from initial to final</li>
+            <li><strong>H and V axes:</strong> Horizontal and Vertical polarization directions</li>
+            <li><strong>What it shows:</strong> Top-down view of how much the polarization has rotated</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="content-box" style="border-left-color: #28a745;">
+        <h4 style="color: #28a745;">💡 Key Physics Insights</h4>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>1. Rotation Formula:</strong> θ = V × B × L means stronger fields (B), longer paths (L), 
+        or materials with higher Verdet constants (V) create more rotation.
+        </p>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>2. Animation Mode:</strong> If enabled, you'll see the light propagating through the material 
+        step-by-step, watching the polarization rotate gradually as distance increases.
+        </p>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>3. Bloch Sphere (bottom):</strong> Shows the quantum state representation - the qubit equivalent 
+        of the polarization state before and after rotation.
+        </p>
+        <p style="margin-bottom: 0;">
+        <strong>4. Non-reciprocal Behavior:</strong> Unlike normal rotators, if light bounces back through a 
+        Faraday rotator, it rotates even MORE in the same direction rather than undoing the rotation!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # ========================================================================
+    # NEW SECTION: BB84 BASIS ALIGNMENT USING FARADAY ROTATOR
+    # ========================================================================
+    st.markdown("### 🎯 BB84 Basis Alignment with Faraday Rotator")
+    st.markdown("""
+    <div class="gradient-box">
+        <h3>Polarization Control for Quantum Key Distribution</h3>
+        <p>In BB84, photons must be precisely aligned to either the <strong>rectilinear basis</strong> (|H⟩, |V⟩) 
+        or <strong>diagonal basis</strong> (|D⟩, |A⟩). The Faraday rotator provides active control to correct 
+        polarization drift and ensure accurate basis preparation.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Control panel for basis alignment
+    align_col1, align_col2 = st.columns([1, 2])
+    
+    with align_col1:
+        st.markdown("### ⚙️ Alignment Controls")
+        
+        # Material selection for different Verdet constants
+        material = st.selectbox(
+            "**Select Material:**",
+            ["Flint Glass (V=50)", "Fused Silica (V=20)", "TGG Crystal (V=134)", "Custom"],
+            key="material_select"
+        )
+        
+        if material == "Flint Glass (V=50)":
+            V_align = 50.0
+        elif material == "Fused Silica (V=20)":
+            V_align = 20.0
+        elif material == "TGG Crystal (V=134)":
+            V_align = 134.0
+        else:
+            V_align = st.slider("Custom Verdet Constant (rad/T·m):", 1.0, 200.0, 50.0, 1.0, key="v_custom")
+        
+        B_align = st.slider("**Magnetic Field B (Tesla):**", 0.0, 2.0, 0.5, 0.01, key="b_align")
+        L_align = st.slider("**Path Length L (m):**", 0.01, 0.1, 0.02, 0.005, key="l_align")
+        
+        # Calculate Faraday rotation angle
+        theta_faraday = V_align * B_align * L_align
+        theta_faraday_deg = np.rad2deg(theta_faraday) % 360
+        
+        st.markdown(f"""
+        <div class="gradient-box">
+        <h3>🧮 Faraday Rotation</h3>
+        <h2>θ = {theta_faraday_deg:.2f}°</h2>
+        <p>θ = {V_align:.0f} × {B_align:.2f} × {L_align:.3f}</p>
+        <p>= {theta_faraday:.4f} rad</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Target basis selection
+        target_basis = st.radio(
+            "**Target BB84 Basis:**",
+            ["Rectilinear (+): |H⟩=0°, |V⟩=90°", "Diagonal (×): |D⟩=45°, |A⟩=135°"],
+            key="target_basis"
+        )
+        
+        # Active compensation mode
+        st.markdown("---")
+        compensation_mode = st.checkbox("🔧 Enable Active Compensation", value=False, key="compensation")
+        
+        if compensation_mode:
+            drift_angle = st.slider("**Simulated Drift Angle (°):**", -45.0, 45.0, 15.0, 1.0, key="drift")
+            target_state = st.selectbox(
+                "**Desired Output State:**",
+                ["|H⟩ (0°)", "|V⟩ (90°)", "|D⟩ (45°)", "|A⟩ (135°)"],
+                key="target_state"
+            )
+        
+        st.markdown("---")
+        run_alignment = st.button("🚀 Run Basis Alignment", use_container_width=True, key="run_align")
+    
+    with align_col2:
+        st.markdown("### 📊 Basis Alignment Visualization")
+        
+        if run_alignment:
+            # Define BB84 basis angles
+            bb84_bases = {
+                "H": 0,
+                "V": 90,
+                "D": 45,
+                "A": 135
+            }
+            
+            # Determine initial photon polarization
+            if compensation_mode:
+                # Map target state to angle
+                state_map = {"|H⟩ (0°)": 0, "|V⟩ (90°)": 90, "|D⟩ (45°)": 45, "|A⟩ (135°)": 135}
+                target_angle = state_map[target_state]
+                initial_angle = (target_angle - drift_angle) % 360
+                correction_needed = drift_angle
+            else:
+                # Random initial polarization
+                initial_angle = np.random.uniform(0, 180)
+                correction_needed = 0
+            
+            # Apply Faraday rotation
+            final_angle = (initial_angle + theta_faraday_deg) % 360
+            
+            # Find nearest BB84 basis
+            def find_nearest_basis(angle, bases):
+                min_diff = float('inf')
+                nearest = None
+                for name, basis_angle in bases.items():
+                    diff = min(abs(angle - basis_angle), abs(angle - basis_angle + 360), abs(angle - basis_angle - 360))
+                    if diff < min_diff:
+                        min_diff = diff
+                        nearest = (name, basis_angle)
+                return nearest, min_diff
+            
+            nearest_basis, alignment_error = find_nearest_basis(final_angle, bb84_bases)
+            
+            # Create visualization
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+            
+            # === LEFT PANEL: Basis Alignment Diagram ===
+            ax1.set_xlim(-1.5, 1.5)
+            ax1.set_ylim(-1.5, 1.5)
+            ax1.set_aspect('equal')
+            ax1.set_title("BB84 Basis Alignment", fontsize=14, fontweight='bold', color='#667eea')
+            ax1.grid(True, alpha=0.3)
+            
+            # Draw reference circle
+            circle = plt.Circle((0, 0), 1, fill=False, ls='--', color='gray', alpha=0.5)
+            ax1.add_artist(circle)
+            
+            # Draw BB84 basis vectors
+            basis_colors = {"H": "blue", "V": "green", "D": "purple", "A": "orange"}
+            for name, angle in bb84_bases.items():
+                angle_rad = np.deg2rad(angle)
+                x, y = 1.2 * np.cos(angle_rad), 1.2 * np.sin(angle_rad)
+                ax1.arrow(0, 0, x, y, head_width=0.08, head_length=0.08, 
+                         fc=basis_colors[name], ec=basis_colors[name], alpha=0.3, lw=2)
+                ax1.text(1.35*x, 1.35*y, f'|{name}⟩\n{angle}°', 
+                        ha='center', va='center', fontsize=10, fontweight='bold',
+                        color=basis_colors[name])
+            
+            # Draw initial polarization
+            init_rad = np.deg2rad(initial_angle)
+            ax1.arrow(0, 0, 0.9*np.cos(init_rad), 0.9*np.sin(init_rad),
+                     head_width=0.12, head_length=0.12, fc='cyan', ec='cyan', 
+                     alpha=0.5, lw=3, label=f'Initial: {initial_angle:.1f}°')
+            
+            # Draw final polarization
+            final_rad = np.deg2rad(final_angle)
+            ax1.arrow(0, 0, np.cos(final_rad), np.sin(final_rad),
+                     head_width=0.15, head_length=0.15, fc='red', ec='red', 
+                     lw=4, label=f'Final: {final_angle:.1f}°')
+            
+            # Draw rotation arc
+            if theta_faraday_deg > 0:
+                arc_angles = np.linspace(init_rad, final_rad, 50)
+                arc_x = 0.6 * np.cos(arc_angles)
+                arc_y = 0.6 * np.sin(arc_angles)
+                ax1.plot(arc_x, arc_y, 'r--', lw=2.5, alpha=0.8)
+            
+            ax1.legend(loc='upper left', fontsize=9)
+            ax1.set_xlabel("Horizontal Polarization", fontweight='bold')
+            ax1.set_ylabel("Vertical Polarization", fontweight='bold')
+            
+            # === RIGHT PANEL: Alignment Metrics ===
+            ax2.axis('off')
+            ax2.set_xlim(0, 1)
+            ax2.set_ylim(0, 1)
+            
+            # Display alignment information
+            info_y = 0.9
+            ax2.text(0.5, info_y, "Alignment Analysis", fontsize=16, fontweight='bold', 
+                    ha='center', color='#667eea')
+            
+            info_y -= 0.12
+            ax2.text(0.5, info_y, f"Nearest Basis: |{nearest_basis[0]}⟩ ({nearest_basis[1]}°)", 
+                    fontsize=13, ha='center', fontweight='bold',
+                    bbox=dict(boxstyle='round', facecolor=basis_colors[nearest_basis[0]], alpha=0.3))
+            
+            info_y -= 0.12
+            alignment_quality = "Excellent" if alignment_error < 5 else "Good" if alignment_error < 15 else "Poor"
+            color_quality = "#28a745" if alignment_error < 5 else "#ffc107" if alignment_error < 15 else "#dc3545"
+            ax2.text(0.5, info_y, f"Alignment Error: {alignment_error:.2f}°", 
+                    fontsize=12, ha='center',
+                    bbox=dict(boxstyle='round', facecolor=color_quality, alpha=0.3))
+            
+            info_y -= 0.1
+            ax2.text(0.5, info_y, f"Quality: {alignment_quality}", 
+                    fontsize=12, ha='center', fontweight='bold', color=color_quality)
+            
+            if compensation_mode:
+                info_y -= 0.15
+                ax2.text(0.5, info_y, "Active Compensation Enabled", 
+                        fontsize=11, ha='center', style='italic', color='#667eea')
+                info_y -= 0.08
+                ax2.text(0.5, info_y, f"Drift Corrected: {drift_angle:.1f}°", 
+                        fontsize=10, ha='center')
+                info_y -= 0.08
+                ax2.text(0.5, info_y, f"Target: {target_state}", 
+                        fontsize=10, ha='center', fontweight='bold')
+            
+            info_y -= 0.15
+            ax2.text(0.1, info_y, "Physical Parameters:", fontsize=11, fontweight='bold')
+            info_y -= 0.08
+            ax2.text(0.1, info_y, f"• Verdet Constant: {V_align:.1f} rad/T·m", fontsize=9)
+            info_y -= 0.06
+            ax2.text(0.1, info_y, f"• Magnetic Field: {B_align:.2f} T", fontsize=9)
+            info_y -= 0.06
+            ax2.text(0.1, info_y, f"• Path Length: {L_align*100:.1f} cm", fontsize=9)
+            info_y -= 0.06
+            ax2.text(0.1, info_y, f"• Rotation: {theta_faraday_deg:.2f}°", fontsize=9, fontweight='bold')
+            
+            plt.tight_layout()
+            st.pyplot(fig)
+            plt.close()
+            
+            # Display metrics
+            metric_col1, metric_col2, metric_col3 = st.columns(3)
+            with metric_col1:
+                st.metric("Initial Angle", f"{initial_angle:.1f}°")
+            with metric_col2:
+                st.metric("Faraday Rotation", f"{theta_faraday_deg:.1f}°", f"+θ")
+            with metric_col3:
+                st.metric("Final Angle", f"{final_angle:.1f}°")
+            
+            st.markdown("---")
+            
+            metric_col4, metric_col5, metric_col6 = st.columns(3)
+            with metric_col4:
+                st.metric("Nearest Basis", f"|{nearest_basis[0]}⟩")
+            with metric_col5:
+                st.metric("Alignment Error", f"{alignment_error:.2f}°")
+            with metric_col6:
+                delta_indicator = "↓" if alignment_error < 5 else "→" if alignment_error < 15 else "↑"
+                st.metric("Quality", alignment_quality, delta_indicator)
+            
+            # Generate feedback message
+            if alignment_error < 5:
+                st.success(f"✅ Photon successfully aligned to |{nearest_basis[0]}⟩ basis with {alignment_error:.2f}° error!")
+            elif alignment_error < 15:
+                st.warning(f"⚠️ Photon reasonably aligned to |{nearest_basis[0]}⟩ basis with {alignment_error:.2f}° error. Consider adjusting B field.")
+            else:
+                st.error(f"❌ Poor alignment to |{nearest_basis[0]}⟩ basis ({alignment_error:.2f}° error). Significant B field adjustment needed.")
+            
+            # === Quantum State Representation on Bloch Sphere ===
+            st.markdown("---")
+            st.markdown("**⚛️ Quantum State Representation:**")
+            
+            # Create quantum states
+            qc_initial = QuantumCircuit(1)
+            qc_final = QuantumCircuit(1)
+            
+            # Map polarization angles to quantum states
+            # H (0°) → |0⟩, V (90°) → |1⟩, D (45°) → |+⟩, A (135°) → |-⟩
+            if abs(initial_angle - 0) < 10 or abs(initial_angle - 180) < 10:
+                pass  # Already |0⟩
+            elif abs(initial_angle - 90) < 10:
+                qc_initial.x(0)
+            elif abs(initial_angle - 45) < 10:
+                qc_initial.h(0)
+            elif abs(initial_angle - 135) < 10:
+                qc_initial.x(0)
+                qc_initial.h(0)
+            else:
+                # General rotation for arbitrary angle
+                qc_initial.ry(2 * np.deg2rad(initial_angle), 0)
+            
+            # Apply Faraday rotation as RZ gate (phase rotation)
+            rotation_qc = QuantumCircuit(1)
+            rotation_qc.rz(2 * theta_faraday, 0)
+            
+            initial_state = Statevector.from_instruction(qc_initial)
+            final_state = initial_state.evolve(rotation_qc)
+            
+            bloch_col1, bloch_col2 = st.columns(2)
+            with bloch_col1:
+                st.markdown("**Initial State**")
+                fig_init = plot_bloch_multivector(initial_state)
+                st.pyplot(fig_init)
+                plt.close()
+            with bloch_col2:
+                st.markdown("**Final State (After Faraday Rotation)**")
+                fig_final = plot_bloch_multivector(final_state)
+                st.pyplot(fig_final)
+                plt.close()
+            
+            # Basis identification
+            st.markdown("---")
+            basis_type = "rectilinear" if "Rectilinear" in target_basis else "diagonal"
+            st.markdown(f"""
+            <div class="info-box">
+            <h4>🎯 BB84 Basis Assignment</h4>
+            <p><strong>Target Basis:</strong> {basis_type.capitalize()} ({'+' if basis_type == 'rectilinear' else '×'})</p>
+            <p><strong>Achieved State:</strong> |{nearest_basis[0]}⟩ ≈ {final_angle:.1f}°</p>
+            <p><strong>Use Case:</strong> This polarization state can now be used to encode {'bit 0 (|H⟩) or bit 1 (|V⟩)' if basis_type == 'rectilinear' else 'bit 0 (|D⟩) or bit 1 (|A⟩)'} in BB84 protocol.</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        else:
+            st.info("👆 Configure alignment parameters and click 'Run Basis Alignment'")
+    
+    # ========================================================================
+    # END OF NEW BB84 ALIGNMENT SECTION
+    # ========================================================================
+    
+    st.markdown("---")
+    
+    # Original detailed Faraday simulation continues below
+    col1, col2 = st.columns([1, 2])="l_comp")
+        mode = st.selectbox("Rotator Type", ["Faraday Rotator (non-reciprocal)", "Normal Optical Rotator (reciprocal)"])
+        
+        theta_comp = V_comp * B_comp * L_comp
+        st.markdown(f"""
+        <div class="info-box">
+        <h4>Rotation per pass</h4>
+        <p style="font-size: 1.5rem; font-weight: bold; color: #667eea;">θ = {np.rad2deg(theta_comp):.2f}°</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        animate_comp = st.checkbox("🎬 Animate rotation", value=True, key="comp_anim")
+    
+    with comp_col2:
+        if animate_comp:
+            # Animation
+            import time
+            frames = 50
+            angles = np.linspace(0, theta_comp, frames)
+            
+            placeholder_comp = st.empty()
+            
+            for i in range(frames):
+                f_angle = angles[i]
+                if "Faraday" in mode:
+                    b_angle = f_angle + theta_comp
+                else:
+                    b_angle = -f_angle
+                
+                fig_comp, ax_comp = plt.subplots(figsize=(6, 6))
+                ax_comp.set_xlim(-1.2, 1.2)
+                ax_comp.set_ylim(-1.2, 1.2)
+                ax_comp.set_xlabel("Re(Eₓ)", fontsize=12, fontweight='bold')
+                ax_comp.set_ylabel("Re(Eᵧ)", fontsize=12, fontweight='bold')
+                ax_comp.set_title(f"Polarization Rotation - {mode}", fontsize=13, fontweight='bold', color='#667eea')
+                ax_comp.grid(True, alpha=0.3)
+                ax_comp.set_aspect('equal')
+                
+                circle = plt.Circle((0, 0), 1, fill=False, ls='--', color='gray', alpha=0.5)
+                ax_comp.add_artist(circle)
+                
+                # Forward light
+                fx, fy = np.cos(f_angle), np.sin(f_angle)
+                ax_comp.arrow(0, 0, fx, fy, head_width=0.1, head_length=0.1, 
+                            fc='blue', ec='blue', lw=2.5, alpha=0.8, label='Forward Light')
+                
+                # Backward light
+                bx, by = np.cos(b_angle), np.sin(b_angle)
+                ax_comp.arrow(0, 0, bx, by, head_width=0.1, head_length=0.1, 
+                            fc='red', ec='red', lw=2.5, alpha=0.8, linestyle='--', label='Backward Light')
+                
+                ax_comp.legend(loc='upper right', fontsize=10)
+                
+                # Add angle annotations
+                ax_comp.text(0.7, -1.0, f'Forward: {np.rad2deg(f_angle):.1f}°', 
+                           color='blue', fontsize=11, fontweight='bold',
+                           bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
+                ax_comp.text(0.7, -1.15, f'Backward: {np.rad2deg(b_angle):.1f}°', 
+                           color='red', fontsize=11, fontweight='bold',
+                           bbox=dict(boxstyle='round', facecolor='lightcoral', alpha=0.5))
+                
+                placeholder_comp.pyplot(fig_comp)
+                plt.close()
+                time.sleep(0.05)
+            
+            st.success("✅ Animation complete!")
+        else:
+            # Static view
+            f_angle = theta_comp
+            if "Faraday" in mode:
+                b_angle = f_angle + theta_comp
+            else:
+                b_angle = -f_angle
+            
+            fig_comp, ax_comp = plt.subplots(figsize=(6, 6))
+            ax_comp.set_xlim(-1.2, 1.2)
+            ax_comp.set_ylim(-1.2, 1.2)
+            ax_comp.set_xlabel("Re(Eₓ)", fontsize=12, fontweight='bold')
+            ax_comp.set_ylabel("Re(Eᵧ)", fontsize=12, fontweight='bold')
+            ax_comp.set_title(f"Polarization Rotation - {mode}", fontsize=13, fontweight='bold', color='#667eea')
+            ax_comp.grid(True, alpha=0.3)
+            ax_comp.set_aspect('equal')
+            
+            circle = plt.Circle((0, 0), 1, fill=False, ls='--', color='gray', alpha=0.5)
+            ax_comp.add_artist(circle)
+            
+            # Forward light
+            fx, fy = np.cos(f_angle), np.sin(f_angle)
+            ax_comp.arrow(0, 0, fx, fy, head_width=0.1, head_length=0.1, 
+                        fc='blue', ec='blue', lw=2.5, alpha=0.8, label='Forward Light')
+            
+            # Backward light
+            bx, by = np.cos(b_angle), np.sin(b_angle)
+            ax_comp.arrow(0, 0, bx, by, head_width=0.1, head_length=0.1, 
+                        fc='red', ec='red', lw=2.5, alpha=0.8, linestyle='--', label='Backward Light')
+            
+            ax_comp.legend(loc='upper right', fontsize=10)
+            
+            # Add angle annotations
+            ax_comp.text(0.7, -1.0, f'Forward: {np.rad2deg(f_angle):.1f}°', 
+                       color='blue', fontsize=11, fontweight='bold',
+                       bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
+            ax_comp.text(0.7, -1.15, f'Backward: {np.rad2deg(b_angle):.1f}°', 
+                       color='red', fontsize=11, fontweight='bold',
+                       bbox=dict(boxstyle='round', facecolor='lightcoral', alpha=0.5))
+            
+            st.pyplot(fig_comp)
+            plt.close()
+    
+    st.markdown("---")
+    
+    # Add explanation section
+    st.markdown("""
+    <div class="content-box">
+        <h4>📚 What You're Seeing in the Simulation</h4>
+        <p style="margin-bottom: 1rem;">
+        When you run the Faraday Rotator simulation below, here's what each visualization shows:
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    exp_col1, exp_col2 = st.columns(2)
+    
+    with exp_col1:
+        st.markdown("""
+        <div class="info-box">
+        <h4>🌊 Left Panel: 3D Light Wave</h4>
+        <ul>
+            <li><strong>Blue spiral:</strong> The electric field oscillating as light propagates</li>
+            <li><strong>Red arrow:</strong> The current polarization direction</li>
+            <li><strong>Z-axis:</strong> Direction of light travel through the material</li>
+            <li><strong>What it shows:</strong> How the polarization plane twists as light moves through the magnetic field</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with exp_col2:
+        st.markdown("""
+        <div class="info-box">
+        <h4>🎯 Right Panel: Polarization Plane View</h4>
+        <ul>
+            <li><strong>Blue arrow:</strong> Initial polarization when light enters</li>
+            <li><strong>Red arrow:</strong> Current/final polarization state</li>
+            <li><strong>Green arc:</strong> The rotation path from initial to final</li>
+            <li><strong>H and V axes:</strong> Horizontal and Vertical polarization directions</li>
+            <li><strong>What it shows:</strong> Top-down view of how much the polarization has rotated</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="content-box" style="border-left-color: #28a745;">
+        <h4 style="color: #28a745;">💡 Key Physics Insights</h4>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>1. Rotation Formula:</strong> θ = V × B × L means stronger fields (B), longer paths (L), 
+        or materials with higher Verdet constants (V) create more rotation.
+        </p>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>2. Animation Mode:</strong> If enabled, you'll see the light propagating through the material 
+        step-by-step, watching the polarization rotate gradually as distance increases.
+        </p>
+        <p style="margin-bottom: 0.8rem;">
+        <strong>3. Bloch Sphere (bottom):</strong> Shows the quantum state representation - the qubit equivalent 
+        of the polarization state before and after rotation.
+        </p>
+        <p style="margin-bottom: 0;">
+        <strong>4. Non-reciprocal Behavior:</strong> Unlike normal rotators, if light bounces back through a 
+        Faraday rotator, it rotates even MORE in the same direction rather than undoing the rotation!
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("---")
     

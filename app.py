@@ -591,9 +591,132 @@ with tab3:
     <p>
     The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
     in a magnetic field. This quantum phenomenon is fundamental to optical isolators and magnetic field sensors.
+    A key feature is its <strong>non-reciprocal nature</strong>: light rotating in one direction continues 
+    rotating the same way on the return path, unlike normal optical rotators.
     </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Add comparison simulator at the top
+    st.markdown("---")
+    st.markdown("### 🔄 Non-Reciprocal vs Reciprocal Rotation Comparison")
+    
+    comp_col1, comp_col2 = st.columns([1, 2])
+    
+    with comp_col1:
+        st.markdown("**Compare Rotator Types:**")
+        V_comp = st.slider("Verdet Constant V (rad/T·m)", 1e-5, 1e-3, 1e-4, step=1e-5, format="%.5f", key="v_comp")
+        B_comp = st.slider("Magnetic Field B (Tesla)", 0.0, 1.0, 0.5, 0.01, key="b_comp")
+        L_comp = st.slider("Material Length L (m)", 0.0, 0.1, 0.02, 0.005, key="l_comp")
+        mode = st.selectbox("Rotator Type", ["Faraday Rotator (non-reciprocal)", "Normal Optical Rotator (reciprocal)"])
+        
+        theta_comp = V_comp * B_comp * L_comp
+        st.markdown(f"""
+        <div class="info-box">
+        <h4>Rotation per pass</h4>
+        <p style="font-size: 1.5rem; font-weight: bold; color: #667eea;">θ = {np.rad2deg(theta_comp):.2f}°</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        animate_comp = st.checkbox("🎬 Animate rotation", value=True, key="comp_anim")
+    
+    with comp_col2:
+        if animate_comp:
+            # Animation
+            import time
+            frames = 50
+            angles = np.linspace(0, theta_comp, frames)
+            
+            placeholder_comp = st.empty()
+            
+            for i in range(frames):
+                f_angle = angles[i]
+                if "Faraday" in mode:
+                    b_angle = f_angle + theta_comp
+                else:
+                    b_angle = -f_angle
+                
+                fig_comp, ax_comp = plt.subplots(figsize=(6, 6))
+                ax_comp.set_xlim(-1.2, 1.2)
+                ax_comp.set_ylim(-1.2, 1.2)
+                ax_comp.set_xlabel("Re(Eₓ)", fontsize=12, fontweight='bold')
+                ax_comp.set_ylabel("Re(Eᵧ)", fontsize=12, fontweight='bold')
+                ax_comp.set_title(f"Polarization Rotation - {mode}", fontsize=13, fontweight='bold', color='#667eea')
+                ax_comp.grid(True, alpha=0.3)
+                ax_comp.set_aspect('equal')
+                
+                circle = plt.Circle((0, 0), 1, fill=False, ls='--', color='gray', alpha=0.5)
+                ax_comp.add_artist(circle)
+                
+                # Forward light
+                fx, fy = np.cos(f_angle), np.sin(f_angle)
+                ax_comp.arrow(0, 0, fx, fy, head_width=0.1, head_length=0.1, 
+                            fc='blue', ec='blue', lw=2.5, alpha=0.8, label='Forward Light')
+                
+                # Backward light
+                bx, by = np.cos(b_angle), np.sin(b_angle)
+                ax_comp.arrow(0, 0, bx, by, head_width=0.1, head_length=0.1, 
+                            fc='red', ec='red', lw=2.5, alpha=0.8, linestyle='--', label='Backward Light')
+                
+                ax_comp.legend(loc='upper right', fontsize=10)
+                
+                # Add angle annotations
+                ax_comp.text(0.7, -1.0, f'Forward: {np.rad2deg(f_angle):.1f}°', 
+                           color='blue', fontsize=11, fontweight='bold',
+                           bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
+                ax_comp.text(0.7, -1.15, f'Backward: {np.rad2deg(b_angle):.1f}°', 
+                           color='red', fontsize=11, fontweight='bold',
+                           bbox=dict(boxstyle='round', facecolor='lightcoral', alpha=0.5))
+                
+                placeholder_comp.pyplot(fig_comp)
+                plt.close()
+                time.sleep(0.05)
+            
+            st.success("✅ Animation complete!")
+        else:
+            # Static view
+            f_angle = theta_comp
+            if "Faraday" in mode:
+                b_angle = f_angle + theta_comp
+            else:
+                b_angle = -f_angle
+            
+            fig_comp, ax_comp = plt.subplots(figsize=(6, 6))
+            ax_comp.set_xlim(-1.2, 1.2)
+            ax_comp.set_ylim(-1.2, 1.2)
+            ax_comp.set_xlabel("Re(Eₓ)", fontsize=12, fontweight='bold')
+            ax_comp.set_ylabel("Re(Eᵧ)", fontsize=12, fontweight='bold')
+            ax_comp.set_title(f"Polarization Rotation - {mode}", fontsize=13, fontweight='bold', color='#667eea')
+            ax_comp.grid(True, alpha=0.3)
+            ax_comp.set_aspect('equal')
+            
+            circle = plt.Circle((0, 0), 1, fill=False, ls='--', color='gray', alpha=0.5)
+            ax_comp.add_artist(circle)
+            
+            # Forward light
+            fx, fy = np.cos(f_angle), np.sin(f_angle)
+            ax_comp.arrow(0, 0, fx, fy, head_width=0.1, head_length=0.1, 
+                        fc='blue', ec='blue', lw=2.5, alpha=0.8, label='Forward Light')
+            
+            # Backward light
+            bx, by = np.cos(b_angle), np.sin(b_angle)
+            ax_comp.arrow(0, 0, bx, by, head_width=0.1, head_length=0.1, 
+                        fc='red', ec='red', lw=2.5, alpha=0.8, linestyle='--', label='Backward Light')
+            
+            ax_comp.legend(loc='upper right', fontsize=10)
+            
+            # Add angle annotations
+            ax_comp.text(0.7, -1.0, f'Forward: {np.rad2deg(f_angle):.1f}°', 
+                       color='blue', fontsize=11, fontweight='bold',
+                       bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.5))
+            ax_comp.text(0.7, -1.15, f'Backward: {np.rad2deg(b_angle):.1f}°', 
+                       color='red', fontsize=11, fontweight='bold',
+                       bbox=dict(boxstyle='round', facecolor='lightcoral', alpha=0.5))
+            
+            st.pyplot(fig_comp)
+            plt.close()
+    
+    st.markdown("---")
     
     col1, col2 = st.columns([1, 2])
     
@@ -1097,7 +1220,7 @@ with tab5:
     with col2:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/WhatsApp%20Image%202025-11-10%20at%2010.34.58%20AM.jpeg?raw=true" class="profile-img">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">How To Catch the Thief?</p>
             <p class="profile-bio">

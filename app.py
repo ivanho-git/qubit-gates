@@ -591,305 +591,257 @@ with tab3:
     <p>
     The Faraday effect causes the polarization plane of light to rotate when passing through a medium 
     in a magnetic field. This quantum phenomenon is fundamental to optical isolators and magnetic field sensors.
+    A key feature is its <strong>non-reciprocal nature</strong>: light rotating in one direction continues 
+    rotating the same way on the return path, unlike normal optical rotators. This property makes it ideal 
+    for <strong>aligning photon polarization</strong> to specific bases in quantum key distribution (BB84).
     </p>
     </div>
     """, unsafe_allow_html=True)
     
-    col1, col2 = st.columns([1, 2])
+    st.markdown("---")
+    st.markdown("### 🔄 Non-Reciprocal vs Reciprocal Rotation Comparison")
     
-    with col1:
-        st.markdown("### ⚙️ Physical Parameters")
+    comp_col1, comp_col2 = st.columns([1, 2])
+    
+    with comp_col1:
+        st.markdown("**Compare Rotator Types:**")
+        V_comp = st.slider("Verdet Constant V (rad/T·m)", 1.0, 150.0, 50.0, step=1.0, key="v_comp")
+        B_comp = st.slider("Magnetic Field B (Tesla)", 0.0, 1.0, 0.5, 0.01, key="b_comp")
+        L_comp = st.slider("Material Length L (m)", 0.0, 0.1, 0.02, 0.005, key="l_comp")
+        mode = st.selectbox("Rotator Type", ["Faraday Rotator (non-reciprocal)", "Normal Optical Rotator (reciprocal)"])
         
-        initial_polarization = st.radio(
-            "**Initial Polarization:**",
-            ["Horizontal (|H⟩)", "Vertical (|V⟩)", "Diagonal (+45°)", "Anti-diagonal (-45°)"]
+        theta_comp = V_comp * B_comp * L_comp
+        st.markdown(f"""
+        <div class="info-box">
+        <h4>Rotation per pass</h4>
+        <p style="font-size: 1.5rem; font-weight: bold; color: #667eea;">θ = {np.rad2deg(theta_comp):.2f}°</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        animate_comp = st.checkbox("🎬 Animate rotation", value=True, key="comp_anim")
+    
+    with comp_col2:
+        # Static view
+        f_angle_final = theta_comp
+        if "Faraday" in mode:
+            b_angle_final = 2 * theta_comp # Final angle after round trip
+        else:
+            b_angle_final = 0 # Final angle after round trip is back to start
+        
+        fig_comp, ax_comp = plt.subplots(figsize=(6, 6))
+        ax_comp.set_xlim(-1.5, 1.5)
+        ax_comp.set_ylim(-1.5, 1.5)
+        ax_comp.set_xlabel("Re(Eₓ)", fontsize=12, fontweight='bold')
+        ax_comp.set_ylabel("Re(Eᵧ)", fontsize=12, fontweight='bold')
+        ax_comp.set_title(f"Polarization Rotation - {mode}", fontsize=13, fontweight='bold', color='#667eea')
+        ax_comp.grid(True, alpha=0.3)
+        ax_comp.set_aspect('equal')
+        
+        # Initial State (0 degrees)
+        ax_comp.arrow(0, 0, 1, 0, head_width=0.1, head_length=0.1, 
+                    fc='gray', ec='gray', lw=2.5, alpha=0.8, label='Initial (0°)')
+
+        # Forward light
+        fx, fy = np.cos(f_angle_final), np.sin(f_angle_final)
+        ax_comp.arrow(0, 0, fx, fy, head_width=0.1, head_length=0.1, 
+                    fc='blue', ec='blue', lw=2.5, alpha=0.8, label=f'Forward: {np.rad2deg(f_angle_final):.1f}°')
+        
+        # Backward light
+        bx, by = np.cos(b_angle_final), np.sin(b_angle_final)
+        ax_comp.arrow(0, 0, bx, by, head_width=0.1, head_length=0.1, 
+                    fc='red', ec='red', lw=2.5, alpha=0.8, linestyle='--', label=f'Return: {np.rad2deg(b_angle_final):.1f}°')
+        
+        ax_comp.legend(loc='upper right', fontsize=10)
+        st.pyplot(fig_comp)
+        plt.close()
+
+    st.markdown("---")
+    
+    st.markdown("""
+    <div class="content-box">
+        <h4>📚 What You're Seeing in the Simulation</h4>
+        <p>This simulation shows what happens to light's polarization after it passes through a rotator, reflects off a mirror, and passes back through the same rotator.</p>
+        <ul>
+            <li><b>Faraday Rotator (Non-reciprocal):</b> The rotation <strong>doubles</strong> upon return. This is crucial for creating optical isolators.</li>
+            <li><b>Normal Rotator (Reciprocal):</b> The rotation is <strong>cancelled out</strong> upon return, bringing the light back to its initial polarization.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # ========================================================================
+    # NEW SECTION: BB84 BASIS ALIGNMENT USING FARADAY ROTATOR
+    # ========================================================================
+    st.markdown("### 🎯 BB84 Basis Alignment with Faraday Rotator")
+    st.markdown("""
+    <div class="gradient-box">
+        <h3>Polarization Control for Quantum Key Distribution</h3>
+        <p>In BB84, photons must be precisely aligned to either the <strong>rectilinear basis</strong> (|H⟩, |V⟩) 
+        or <strong>diagonal basis</strong> (|D⟩, |A⟩). The Faraday rotator provides active control to correct 
+        polarization drift and ensure accurate basis preparation.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Control panel for basis alignment
+    align_col1, align_col2 = st.columns([1, 2])
+    
+    with align_col1:
+        st.markdown("### ⚙️ Alignment Controls")
+        
+        material = st.selectbox(
+            "**Select Material:**",
+            ["Flint Glass (V=50)", "Fused Silica (V=20)", "TGG Crystal (V=134)", "Custom"],
+            key="material_select"
         )
         
-        st.markdown("---")
+        if material == "Flint Glass (V=50)":
+            V_align = 50.0
+        elif material == "Fused Silica (V=20)":
+            V_align = 20.0
+        elif material == "TGG Crystal (V=134)":
+            V_align = 134.0
+        else:
+            V_align = st.slider("Custom Verdet Constant (rad/T·m):", 1.0, 200.0, 50.0, 1.0, key="v_custom")
         
-        verdet_constant = st.slider(
-            "**Verdet Constant (rad/T·m):**",
-            min_value=1.0,
-            max_value=100.0,
-            value=50.0,
-            step=1.0
-        )
+        B_align = st.slider("**Magnetic Field B (Tesla):**", 0.0, 2.0, 0.5, 0.01, key="b_align")
+        L_align = st.slider("**Path Length L (m):**", 0.01, 0.1, 0.02, 0.005, key="l_align")
         
-        magnetic_field = st.slider(
-            "**Magnetic Field (Tesla):**",
-            min_value=0.0,
-            max_value=5.0,
-            value=1.0,
-            step=0.1
-        )
-        
-        path_length = st.slider(
-            "**Path Length (meters):**",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.1,
-            step=0.01
-        )
-        
-        faraday_angle = verdet_constant * magnetic_field * path_length
-        faraday_angle_deg = np.rad2deg(faraday_angle) % 360
+        theta_faraday = V_align * B_align * L_align
+        theta_faraday_deg = np.rad2deg(theta_faraday) % 360
         
         st.markdown(f"""
         <div class="gradient-box">
         <h3>🧮 Faraday Rotation</h3>
-        <h2>θ = {faraday_angle_deg:.1f}°</h2>
-        <p>θ = V × B × L = {faraday_angle:.3f} rad</p>
+        <h2>θ = {theta_faraday_deg:.2f}°</h2>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("---")
+        initial_angle_align = st.slider("**Initial Photon Polarization Angle (°):**", 0, 180, 22, 1, key="initial_align")
         
-        show_faraday_animation = st.checkbox("🎬 Animate propagation", value=True, key="faraday_anim")
-        
-        if show_faraday_animation:
-            propagation_steps = st.slider("Steps:", 10, 50, 25, key="faraday_steps")
-            animation_speed = st.slider("Speed:", 1, 10, 5, key="anim_speed")
-        
-        simulate_faraday = st.button("🔬 Run Simulation", use_container_width=True)
+        run_alignment = st.button("🚀 Run Basis Alignment", use_container_width=True, key="run_align")
     
-    with col2:
-        st.markdown("### 📊 Polarization Evolution")
+    with align_col2:
+        st.markdown("### 📊 Basis Alignment Visualization")
         
-        if simulate_faraday:
-            if initial_polarization == "Horizontal (|H⟩)":
-                initial_angle = 0
-            elif initial_polarization == "Vertical (|V⟩)":
-                initial_angle = 90
-            elif initial_polarization == "Diagonal (+45°)":
-                initial_angle = 45
-            else:
-                initial_angle = -45
+        if run_alignment:
+            bb84_bases = {"H": 0, "V": 90, "D": 45, "A": 135}
+            final_angle = (initial_angle_align + theta_faraday_deg) % 360
             
-            if show_faraday_animation:
-                angles_through_medium = np.linspace(0, faraday_angle_deg, propagation_steps)
-                distances = np.linspace(0, path_length, propagation_steps)
-                
-                animation_placeholder = st.empty()
-                progress_bar = st.progress(0)
-                
-                import time
-                
-                for i, (rotation_angle, current_distance) in enumerate(zip(angles_through_medium, distances)):
-                    current_pol_angle = initial_angle + rotation_angle
-                    
-                    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-                    
-                    # 3D wave visualization
-                    ax1 = plt.subplot(121, projection='3d')
-                    z = np.linspace(0, 2*np.pi, 100)
-                    angle_rad = np.deg2rad(current_pol_angle)
-                    Ex = np.cos(angle_rad) * np.sin(z)
-                    Ey = np.sin(angle_rad) * np.sin(z)
-                    
-                    ax1.plot(Ex, Ey, z, 'b-', linewidth=2.5, label='E-field', alpha=0.8)
-                    
-                    arrow_length = 1.2
-                    ax1.quiver(0, 0, 0, 
-                              arrow_length * np.cos(angle_rad), 
-                              arrow_length * np.sin(angle_rad), 
-                              0,
-                              color='red', arrow_length_ratio=0.3, linewidth=4,
-                              label=f'Pol: {current_pol_angle:.1f}°')
-                    
-                    ax1.set_xlabel('Ex (H)', fontsize=11, fontweight='bold')
-                    ax1.set_ylabel('Ey (V)', fontsize=11, fontweight='bold')
-                    ax1.set_zlabel('Propagation', fontsize=11, fontweight='bold')
-                    ax1.set_title(f'Light Wave\nDistance: {current_distance*100:.1f} cm', 
-                                 fontsize=13, fontweight='bold', color='#667eea')
-                    ax1.set_xlim([-1.5, 1.5])
-                    ax1.set_ylim([-1.5, 1.5])
-                    ax1.set_zlim([0, 2*np.pi])
-                    ax1.legend(loc='upper right', fontsize=9)
-                    ax1.view_init(elev=20, azim=45)
-                    ax1.grid(True, alpha=0.3)
-                    
-                    # Polarization plane view
-                    ax2.set_aspect('equal')
-                    
-                    # Reference axes
-                    ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, 
-                             fc='gray', ec='gray', alpha=0.3)
-                    ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, 
-                             fc='gray', ec='gray', alpha=0.3)
-                    ax2.text(1.35, 0, 'H', fontsize=13, ha='left', va='center', fontweight='bold')
-                    ax2.text(0, 1.35, 'V', fontsize=13, ha='center', va='bottom', fontweight='bold')
-                    
-                    # Initial polarization
-                    initial_rad = np.deg2rad(initial_angle)
-                    ax2.arrow(0, 0, np.cos(initial_rad), np.sin(initial_rad), 
-                             head_width=0.15, head_length=0.15, 
-                             fc='blue', ec='blue', alpha=0.3, linewidth=2.5,
-                             label=f'Initial: {initial_angle}°')
-                    
-                    # Current polarization
-                    ax2.arrow(0, 0, np.cos(angle_rad), np.sin(angle_rad), 
-                             head_width=0.15, head_length=0.15, 
-                             fc='red', ec='red', alpha=1.0, linewidth=3.5,
-                             label=f'Current: {current_pol_angle:.1f}°')
-                    
-                    # Rotation arc
-                    if rotation_angle > 0:
-                        arc_angles = np.linspace(initial_rad, angle_rad, 50)
-                        arc_x = 0.5 * np.cos(arc_angles)
-                        arc_y = 0.5 * np.sin(arc_angles)
-                        ax2.plot(arc_x, arc_y, 'g--', linewidth=2.5, alpha=0.8)
-                        ax2.text(0, -0.8, f'Rotation: {rotation_angle:.1f}°', 
-                                fontsize=12, ha='center', color='green', 
-                                fontweight='bold', bbox=dict(boxstyle='round', 
-                                facecolor='lightgreen', alpha=0.5))
-                    
-                    ax2.set_xlim([-1.6, 1.6])
-                    ax2.set_ylim([-1.6, 1.6])
-                    ax2.set_title(f'Polarization Plane\nB = {magnetic_field:.1f} T', 
-                                 fontsize=13, fontweight='bold', color='#667eea')
-                    ax2.legend(loc='upper right', fontsize=10)
-                    ax2.grid(True, alpha=0.3, linestyle='--')
-                    ax2.axhline(y=0, color='k', linewidth=0.8, alpha=0.3)
-                    ax2.axvline(x=0, color='k', linewidth=0.8, alpha=0.3)
-                    
-                    plt.tight_layout()
-                    
-                    with animation_placeholder.container():
-                        col_a, col_b, col_c = st.columns(3)
-                        with col_a:
-                            st.metric("Distance", f"{current_distance*100:.1f} cm", 
-                                     f"{(current_distance/path_length)*100:.0f}%")
-                        with col_b:
-                            st.metric("Rotation", f"{rotation_angle:.1f}°")
-                        with col_c:
-                            st.metric("Polarization", f"{current_pol_angle:.1f}°")
-                        
-                        st.pyplot(fig)
-                    
-                    plt.close()
-                    progress_bar.progress((i + 1) / propagation_steps)
-                    time.sleep(0.1 / animation_speed)
-                
-                progress_bar.empty()
-                st.success(f"✅ Polarization rotated from {initial_angle}° to {initial_angle + faraday_angle_deg:.1f}°")
-                
-                # Quantum state representation
-                st.markdown("---")
-                st.markdown("**⚛️ Quantum State Representation:**")
-                
-                qc_initial = QuantumCircuit(1)
-                if initial_polarization == "Horizontal (|H⟩)":
-                    pass
-                elif initial_polarization == "Vertical (|V⟩)":
-                    qc_initial.x(0)
-                elif initial_polarization == "Diagonal (+45°)":
-                    qc_initial.h(0)
-                else:
-                    qc_initial.x(0)
-                    qc_initial.h(0)
-                
-                initial_state = Statevector.from_instruction(qc_initial)
-                rotation_qc = QuantumCircuit(1)
-                rotation_qc.rz(2 * faraday_angle, 0)
-                final_state = initial_state.evolve(rotation_qc)
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.markdown("**Initial State**")
-                    fig = plot_bloch_multivector(initial_state)
-                    st.pyplot(fig)
-                    plt.close()
-                with col2:
-                    st.markdown("**Final State**")
-                    fig = plot_bloch_multivector(final_state)
-                    st.pyplot(fig)
-                    plt.close()
-                
+            def find_nearest_basis(angle, bases):
+                min_diff = float('inf')
+                nearest = None
+                for name, basis_angle in bases.items():
+                    diff = min(abs(angle - basis_angle), abs(angle - (basis_angle + 180))) % 180
+                    if diff < min_diff:
+                        min_diff = diff
+                        nearest = (name, basis_angle)
+                return nearest, min_diff
+            
+            nearest_basis, alignment_error = find_nearest_basis(final_angle, bb84_bases)
+            
+            fig_align, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 7), gridspec_kw={'width_ratios': [2, 1]})
+            
+            ax1.set_xlim(-1.5, 1.5)
+            ax1.set_ylim(-1.5, 1.5)
+            ax1.set_aspect('equal')
+            ax1.set_title("BB84 Basis Alignment", fontsize=14, fontweight='bold', color='#667eea')
+            ax1.grid(True, alpha=0.3)
+            
+            basis_colors = {"H": "blue", "V": "green", "D": "purple", "A": "orange"}
+            for name, angle in bb84_bases.items():
+                angle_rad = np.deg2rad(angle)
+                x, y = 1.2 * np.cos(angle_rad), 1.2 * np.sin(angle_rad)
+                ax1.arrow(0, 0, x, y, head_width=0.08, head_length=0.08, fc=basis_colors[name], ec=basis_colors[name], alpha=0.3, lw=2)
+                ax1.text(1.4*x, 1.4*y, f'|{name}⟩\n{angle}°', ha='center', va='center', fontsize=10, fontweight='bold', color=basis_colors[name])
+            
+            init_rad = np.deg2rad(initial_angle_align)
+            ax1.arrow(0, 0, 0.9*np.cos(init_rad), 0.9*np.sin(init_rad), head_width=0.12, head_length=0.12, fc='cyan', ec='cyan', alpha=0.5, lw=3, label=f'Initial: {initial_angle_align:.1f}°')
+            
+            final_rad = np.deg2rad(final_angle)
+            ax1.arrow(0, 0, np.cos(final_rad), np.sin(final_rad), head_width=0.15, head_length=0.15, fc='red', ec='red', lw=4, label=f'Final: {final_angle:.1f}°')
+            
+            if theta_faraday_deg > 0:
+                arc_angles = np.linspace(init_rad, final_rad, 50)
+                arc_x = 0.6 * np.cos(arc_angles)
+                arc_y = 0.6 * np.sin(arc_angles)
+                ax1.plot(arc_x, arc_y, 'r--', lw=2.5, alpha=0.8)
+            
+            ax1.legend(loc='upper left', fontsize=9)
+            ax1.set_xlabel("Horizontal Polarization", fontweight='bold')
+            ax1.set_ylabel("Vertical Polarization", fontweight='bold')
+            
+            ax2.axis('off')
+            ax2.set_xlim(0, 1)
+            ax2.set_ylim(0, 1)
+            
+            info_y = 0.9
+            ax2.text(0.5, info_y, "Alignment Analysis", fontsize=16, fontweight='bold', ha='center', color='#667eea')
+            
+            info_y -= 0.15
+            ax2.text(0.5, info_y, f"Nearest Basis: |{nearest_basis[0]}⟩", fontsize=13, ha='center', fontweight='bold', bbox=dict(boxstyle='round', facecolor=basis_colors[nearest_basis[0]], alpha=0.3))
+            
+            info_y -= 0.15
+            alignment_quality = "Excellent" if alignment_error < 5 else "Good" if alignment_error < 15 else "Poor"
+            color_quality = "#28a745" if alignment_error < 5 else "#ffc107" if alignment_error < 15 else "#dc3545"
+            ax2.text(0.5, info_y, f"Alignment Error: {alignment_error:.2f}°", fontsize=12, ha='center', bbox=dict(boxstyle='round', facecolor=color_quality, alpha=0.3))
+            
+            info_y -= 0.1
+            ax2.text(0.5, info_y, f"Quality: {alignment_quality}", fontsize=12, ha='center', fontweight='bold', color=color_quality)
+
+            info_y -= 0.15
+            ax2.text(0.1, info_y, "Physical Parameters:", fontsize=11, fontweight='bold')
+            info_y -= 0.08
+            ax2.text(0.1, info_y, f"• Rotation: {theta_faraday_deg:.2f}°", fontsize=10, fontweight='bold')
+
+            plt.tight_layout()
+            st.pyplot(fig_align)
+            plt.close()
+            
+            metric_col1, metric_col2, metric_col3 = st.columns(3)
+            with metric_col1:
+                st.metric("Final Angle", f"{final_angle:.1f}°")
+            with metric_col2:
+                st.metric("Nearest Basis", f"|{nearest_basis[0]}⟩")
+            with metric_col3:
+                st.metric("Alignment Error", f"{alignment_error:.2f}°", delta=f"{alignment_quality}", delta_color="off")
+            
+            if alignment_error < 5:
+                st.success(f"✅ Photon successfully aligned to |{nearest_basis[0]}⟩ basis!")
+            elif alignment_error < 15:
+                st.warning(f"⚠️ Photon reasonably aligned. Consider adjusting B field for better accuracy.")
             else:
-                # Static visualization
-                final_pol_angle = initial_angle + faraday_angle_deg
-                
-                fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-                
-                # 3D wave
-                ax1 = plt.subplot(121, projection='3d')
-                z = np.linspace(0, 2*np.pi, 100)
-                angle_rad = np.deg2rad(final_pol_angle)
-                Ex = np.cos(angle_rad) * np.sin(z)
-                Ey = np.sin(angle_rad) * np.sin(z)
-                
-                ax1.plot(Ex, Ey, z, 'b-', linewidth=2.5, alpha=0.8)
-                arrow_length = 1.2
-                ax1.quiver(0, 0, 0, 
-                          arrow_length * np.cos(angle_rad), 
-                          arrow_length * np.sin(angle_rad), 
-                          0,
-                          color='red', arrow_length_ratio=0.3, linewidth=4)
-                
-                ax1.set_xlabel('Ex (H)', fontsize=11, fontweight='bold')
-                ax1.set_ylabel('Ey (V)', fontsize=11, fontweight='bold')
-                ax1.set_zlabel('Propagation', fontsize=11, fontweight='bold')
-                ax1.set_title(f'Final Light Wave\nAfter {path_length*100:.1f} cm', 
-                             fontsize=13, fontweight='bold', color='#667eea')
-                ax1.set_xlim([-1.5, 1.5])
-                ax1.set_ylim([-1.5, 1.5])
-                ax1.set_zlim([0, 2*np.pi])
-                ax1.view_init(elev=20, azim=45)
-                ax1.grid(True, alpha=0.3)
-                
-                # Polarization comparison
-                ax2.set_aspect('equal')
-                ax2.arrow(0, 0, 1.2, 0, head_width=0.1, head_length=0.1, 
-                         fc='gray', ec='gray', alpha=0.3)
-                ax2.arrow(0, 0, 0, 1.2, head_width=0.1, head_length=0.1, 
-                         fc='gray', ec='gray', alpha=0.3)
-                ax2.text(1.35, 0, 'H', fontsize=13, fontweight='bold')
-                ax2.text(0, 1.35, 'V', fontsize=13, fontweight='bold')
-                
-                # Initial
-                initial_rad = np.deg2rad(initial_angle)
-                ax2.arrow(0, 0, np.cos(initial_rad), np.sin(initial_rad), 
-                         head_width=0.15, head_length=0.15, 
-                         fc='blue', ec='blue', alpha=0.3, linewidth=2.5,
-                         label=f'Initial: {initial_angle}°')
-                
-                # Final
-                ax2.arrow(0, 0, np.cos(angle_rad), np.sin(angle_rad), 
-                         head_width=0.15, head_length=0.15, 
-                         fc='red', ec='red', linewidth=3.5,
-                         label=f'Final: {final_pol_angle:.1f}°')
-                
-                # Arc
-                arc_angles = np.linspace(initial_rad, angle_rad, 50)
-                arc_x = 0.5 * np.cos(arc_angles)
-                arc_y = 0.5 * np.sin(arc_angles)
-                ax2.plot(arc_x, arc_y, 'g--', linewidth=2.5, alpha=0.8)
-                ax2.text(0, -0.8, f'Rotation: {faraday_angle_deg:.1f}°', 
-                        fontsize=12, ha='center', color='green', fontweight='bold',
-                        bbox=dict(boxstyle='round', facecolor='lightgreen', alpha=0.5))
-                
-                ax2.set_xlim([-1.6, 1.6])
-                ax2.set_ylim([-1.6, 1.6])
-                ax2.set_title(f'Polarization Rotation\nB = {magnetic_field:.1f} T, L = {path_length*100:.1f} cm', 
-                             fontsize=13, fontweight='bold', color='#667eea')
-                ax2.legend(loc='upper right', fontsize=10)
-                ax2.grid(True, alpha=0.3, linestyle='--')
-                ax2.axhline(y=0, color='k', linewidth=0.8, alpha=0.3)
-                ax2.axvline(x=0, color='k', linewidth=0.8, alpha=0.3)
-                
-                plt.tight_layout()
-                st.pyplot(fig)
+                st.error(f"❌ Poor alignment. Significant B field adjustment needed.")
+
+            st.markdown("---")
+            st.markdown("**⚛️ Quantum State Representation on Bloch Sphere:**")
+            
+            qc_initial = QuantumCircuit(1)
+            qc_initial.ry(2 * np.deg2rad(initial_angle_align), 0)
+            
+            rotation_qc = QuantumCircuit(1)
+            rotation_qc.rz(2 * theta_faraday, 0)
+            
+            initial_state = Statevector.from_instruction(qc_initial)
+            final_state = initial_state.evolve(rotation_qc)
+            
+            bloch_col1, bloch_col2 = st.columns(2)
+            with bloch_col1:
+                st.markdown("**Initial State**")
+                fig_init = plot_bloch_multivector(initial_state)
+                st.pyplot(fig_init)
                 plt.close()
-                
-                st.success(f"✅ Polarization rotated by {faraday_angle_deg:.1f}°")
-        
+            with bloch_col2:
+                st.markdown("**Final State**")
+                fig_final = plot_bloch_multivector(final_state)
+                st.pyplot(fig_final)
+                plt.close()
         else:
-            st.info("👆 Configure parameters and click 'Run Simulation'")
+            st.info("👆 Configure alignment parameters and click 'Run Basis Alignment'")
 
 with tab4:
     st.markdown('<p class="section-header">BB84 Quantum Key Distribution</p>', unsafe_allow_html=True)
     
-    # Hero section
     st.markdown("""
     <div class="gradient-box">
         <h1 style='font-size: 2.8rem; margin-bottom: 1rem;'>🔐 BB84 Protocol</h1>
@@ -899,9 +851,7 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
-    # Introduction
     col1, col2 = st.columns(2)
-    
     with col1:
         st.markdown("""
         <div class="info-box" style="height: 100%;">
@@ -910,10 +860,6 @@ with tab4:
         <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
         It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
         any eavesdropper, even one with unlimited computing power.
-        </p>
-        <p>
-        The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
-        the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
         </p>
         </div>
         """, unsafe_allow_html=True)
@@ -932,64 +878,20 @@ with tab4:
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<div class='content-box'><h4>🔬 How Does BB84 Work?</h4></div>", unsafe_allow_html=True)
     
-    # How it works
-    st.markdown("""
-    <div class='content-box'>
-        <h4>🔬 How Does BB84 Work?</h4>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Protocol steps
     steps_col1, steps_col2 = st.columns(2)
-    
     with steps_col1:
-        st.markdown("""
-        <div class="info-box">
-        <h4>1️⃣ Quantum Transmission</h4>
-        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class="info-box">
-        <h4>2️⃣ Random Measurement</h4>
-        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class="info-box">
-        <h4>3️⃣ Basis Reconciliation</h4>
-        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        st.markdown("<div class='info-box'><h4>1️⃣ Quantum Transmission</h4><p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='info-box'><h4>2️⃣ Random Measurement</h4><p>Bob randomly chooses bases to measure the received photons, recording the results.</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='info-box'><h4>3️⃣ Basis Reconciliation</h4><p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p></div>", unsafe_allow_html=True)
     with steps_col2:
-        st.markdown("""
-        <div class="info-box">
-        <h4>4️⃣ Error Checking</h4>
-        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class="info-box">
-        <h4>5️⃣ Privacy Amplification</h4>
-        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class="info-box">
-        <h4>6️⃣ Secure Key</h4>
-        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("<div class='info-box'><h4>4️⃣ Error Checking</h4><p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='info-box'><h4>5️⃣ Privacy Amplification</h4><p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p></div>", unsafe_allow_html=True)
+        st.markdown("<div class='info-box'><h4>6️⃣ Secure Key</h4><p>Alice and Bob now share an identical, secret key for encrypting communications!</p></div>", unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Two bases
     st.markdown("""
     <div class='content-box' style='border-left-color: #ffc107;'>
         <h4 style='color: #ffc107;'>💡 The Two Bases</h4>
@@ -1006,7 +908,6 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
-    # Security section
     st.markdown("""
     <div class='content-box' style='border-left-color: #17a2b8;'>
         <h4 style='color: #17a2b8;'>🛡️ Why is BB84 Unbreakable?</h4>
@@ -1016,134 +917,75 @@ with tab4:
     </div>
     """, unsafe_allow_html=True)
     
-    # Applications
-    st.markdown("""
-    <div class='content-box' style='border-left-color: #28a745;'>
-        <h4 style='color: #28a745;'>🌍 Real-World Applications</h4>
-        <ul style='margin-bottom: 0;'>
-            <li style='margin-bottom: 0.5rem;'><strong>Banking & Finance:</strong> Securing high-value financial transactions</li>
-            <li style='margin-bottom: 0.5rem;'><strong>Government Communications:</strong> Protecting classified information</li>
-            <li style='margin-bottom: 0.5rem;'><strong>Quantum Internet:</strong> Building the foundation for quantum networks</li>
-            <li><strong>Satellite QKD:</strong> China's Micius satellite demonstrated space-based BB84</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Call to action
     st.markdown("""
     <div class="feature-box" style="text-align: center; margin: 3rem 0;">
-        <h2 style='font-size: 2.2rem; margin-bottom: 1rem;'>
-            🧪 Ready to Experience BB84 in Action?
-        </h2>
-        <p style='font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.95;'>
-            Try our interactive BB84 simulator and see quantum key distribution working in real-time!
-        </p>
+        <h2 style='font-size: 2.2rem; margin-bottom: 1rem;'>🧪 Ready to Experience BB84 in Action?</h2>
+        <p style='font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.95;'>Try our interactive BB84 simulator and see quantum key distribution working in real-time!</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Center the button
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown("""
             <a href="https://bb84.srijan.dpdns.org/" target="_blank" style="text-decoration: none;">
-                <button class="custom-link-button">
-                    🚀 ENTER THE SIMULATION LAB
-                </button>
+                <button class="custom-link-button">🚀 ENTER THE SIMULATION LAB</button>
             </a>
         """, unsafe_allow_html=True)
     
     st.markdown("<br><br>", unsafe_allow_html=True)
-    
-    # Additional resources
-    with st.expander("📖 Learn More About BB84"):
-        st.markdown("""
-        ### Further Reading
-        
-        - **Original Paper:** Bennett, C. H., & Brassard, G. (1984). "Quantum cryptography: Public key distribution and coin tossing"
-        - **Key Concepts:** Quantum mechanics, photon polarization, basis reconciliation, privacy amplification
-        - **Modern Implementations:** Commercial QKD systems are now available with distances up to 100+ km
-        
-        ### Historical Context
-        
-        BB84 was proposed by Charles Bennett and Gilles Brassard in 1984, making it one of the earliest applications 
-        of quantum mechanics to information theory. It laid the foundation for the entire field of quantum cryptography.
-        
-        ### Recent Achievements
-        
-        - **2017:** China's Micius satellite achieved intercontinental quantum key distribution
-        - **2020:** Commercial quantum networks deployed in major cities worldwide
-        - **2023:** Record-breaking QKD distances achieved with trusted node networks
-        """)
 
 with tab5:
     st.markdown('<p class="section-header">Meet The Team</p>', unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>The innovators dedicated to making quantum concepts accessible to all.</p>", unsafe_allow_html=True)
 
-    # --- ROW 1 ---
     col1, col2, col3 = st.columns(3, gap="large")
-
     with col1:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/abhinav.jpeg?raw=true" class="profile-img">
             <p class="profile-name">ABHINAV SUNEESH</p>
             <p class="profile-role">BB84 in DFS Researcher</p>
-            <p class="profile-bio">
-                Explores how BB84 operates within a Decoherence-Free Subspace to protect information from environmental noise.
-            </p>
+            <p class="profile-bio">Explores how BB84 operates within a Decoherence-Free Subspace to protect information from environmental noise.</p>
         </div>
         """, unsafe_allow_html=True)
-
     with col2:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">How To Catch the Thief?</p>
-            <p class="profile-bio">
-                The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
-            </p>
+            <p class="profile-bio">The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.</p>
         </div>
         """, unsafe_allow_html=True)
-
     with col3:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
             <p class="profile-name">HARI ASHWIN</p>
             <p class="profile-role">Qubits and Gates Expert</p>
-            <p class="profile-bio">
-                The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
-            </p>
+            <p class="profile-bio">The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.</p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # --- ROW 2 (Centered) ---
     _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
-
     with col4:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
             <p class="profile-name">SRIJAN GUCHHAIT</p>
             <p class="profile-role">BB84 Idealist</p>
-            <p class="profile-bio">
-                Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
-            </p>
+            <p class="profile-bio">Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.</p>
         </div>
         """, unsafe_allow_html=True)
-
     with col5:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
             <p class="profile-name">OM THAVARI</p>
             <p class="profile-role">Faraday Rotator Technician</p>
-            <p class="profile-bio">
-                Manages optical components, ensuring polarization rotations are precise and consistent.
-            </p>
+            <p class="profile-bio">Manages optical components, ensuring polarization rotations are precise and consistent.</p>
         </div>
         """, unsafe_allow_html=True)
 

@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Page configurationhttps://github.com/ivanho-git/qubit-gates/edit/main/app.py
+# Page configuration
 st.set_page_config(
     page_title="Quantum Gate Simulator",
     page_icon="⚛️",
@@ -15,14 +15,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Premium Custom CSS
+# Premium Custom CSS (Dark Mode Compatible)
 st.markdown("""
     <style>
     /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
     
     /* Global Styles */
-    * {
+    html, body, [class*="st-"] {
         font-family: 'Poppins', sans-serif;
     }
     
@@ -33,11 +33,10 @@ st.markdown("""
     
     .block-container {
         padding: 2rem 3rem;
-        background: rgba(255, 255, 255, 0.95);
+        background: var(--secondary-background-color);
         border-radius: 20px;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         margin: 2rem auto;
-        backdrop-filter: blur(10px);
     }
     
     /* Main Header */
@@ -54,7 +53,8 @@ st.markdown("""
     
     .subtitle {
         text-align: center;
-        color: #666;
+        color: var(--text-color);
+        opacity: 0.8;
         font-size: 1.2rem;
         margin-bottom: 2rem;
         font-weight: 300;
@@ -76,9 +76,9 @@ st.markdown("""
     
     .stTabs [data-baseweb="tab"] {
         height: 60px;
-        background: white;
+        background: var(--background-color); /* Theme-aware */
         border-radius: 10px;
-        color: #333;
+        color: var(--text-color); /* Theme-aware */
         font-weight: 600;
         font-size: 1.1rem;
         padding: 0 2rem;
@@ -127,7 +127,7 @@ st.markdown("""
         padding: 1.5rem;
         border-radius: 15px;
         margin: 1rem 0;
-        color: #000000;
+        color: var(--text-color); /* Theme-aware */
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         border-left: 5px solid #667eea;
         transition: all 0.3s ease;
@@ -138,8 +138,8 @@ st.markdown("""
         box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
     }
     
-    .info-box h3, .info-box h4, .info-box p, .info-box ul, .info-box li {
-        color: #000000 !important;
+    .info-box p, .info-box ul, .info-box li {
+        color: inherit !important; /* Inherit from .info-box parent */
     }
     
     .info-box h3 {
@@ -158,7 +158,7 @@ st.markdown("""
     
     /* Card Styling */
     .card {
-        background: white;
+        background: var(--secondary-background-color); /* Theme-aware */
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -185,18 +185,6 @@ st.markdown("""
     
     .gradient-box h1, .gradient-box h2, .gradient-box h3, .gradient-box p {
         color: white !important;
-    }
-    
-    /* Select boxes and inputs */
-    .stSelectbox, .stRadio {
-        background: white;
-        border-radius: 10px;
-        padding: 0.5rem;
-    }
-    
-    /* Sliders */
-    .stSlider {
-        padding: 1rem 0;
     }
     
     /* Metric styling */
@@ -328,16 +316,13 @@ with tab1:
         st.markdown("**Select Quantum Gate:**")
         gate_category = st.radio(
             "Gate Category:",
-            ["⚡ Pauli Gates", "🌟 Hadamard & Phase", "🚀 Advanced Gates"],
-            label_visibility="collapsed"
+            ["⚡ Pauli Gates", "🌟 Hadamard & Phase"]
         )
         
         if gate_category == "⚡ Pauli Gates":
-            gate = st.selectbox("", ["Identity", "X (NOT)", "Y", "Z"], label_visibility="collapsed")
-        elif gate_category == "🌟 Hadamard & Phase":
-            gate = st.selectbox("", ["H (Hadamard)", "S (Phase)", "T", "S† (S-dagger)", "T† (T-dagger)"], label_visibility="collapsed")
-        else:
-            gate = st.selectbox("", ["SX (√X)", "SY (√Y)", "RZ(π/2)"], label_visibility="collapsed")
+            gate = st.selectbox("Select Pauli Gate:", ["Identity", "X (NOT)", "Y", "Z"])
+        else: # Corresponds to "🌟 Hadamard & Phase"
+            gate = st.selectbox("Select Hadamard & Phase Gate:", ["H (Hadamard)", "S (Phase)", "T", "S† (S-dagger)", "T† (T-dagger)"])
         
         st.markdown("---")
         apply_button = st.button("🚀 Apply Gate", use_container_width=True)
@@ -353,9 +338,6 @@ with tab1:
             "T": "45° phase rotation (π/4)",
             "S† (S-dagger)": "Inverse S gate (-π/2)",
             "T† (T-dagger)": "Inverse T gate (-π/4)",
-            "SX (√X)": "Square root of X gate",
-            "SY (√Y)": "Square root of Y gate",
-            "RZ(π/2)": "Z-axis rotation by π/2"
         }
         
         st.markdown(f"""
@@ -370,9 +352,9 @@ with tab1:
     
     with col2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Quantum State Visualization")
         
         if apply_button:
+            st.markdown("### 📊 Quantum State Visualization")
             qc = QuantumCircuit(1)
             
             # Set initial state
@@ -402,12 +384,6 @@ with tab1:
                     qc.sdg(0)
                 elif gate == "T† (T-dagger)":
                     qc.tdg(0)
-                elif gate == "SX (√X)":
-                    qc.sx(0)
-                elif gate == "SY (√Y)":
-                    qc.sy(0)
-                elif gate == "RZ(π/2)":
-                    qc.rz(np.pi/2, 0)
             
             state = Statevector.from_instruction(qc)
             state_array = state.data
@@ -498,9 +474,9 @@ with tab2:
     
     with col2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Rotation Visualization")
         
         if apply_rotation:
+            st.markdown("### 📊 Rotation Visualization")
             if animate:
                 angles = np.linspace(0, angle_radians, num_steps)
                 
@@ -680,9 +656,9 @@ with tab3:
     
     with col2:
         st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown("### 📊 Polarization Evolution")
         
         if simulate_faraday:
+            st.markdown("### 📊 Polarization Evolution")
             if initial_polarization == "Horizontal (|H⟩)":
                 initial_angle = 0
             elif initial_polarization == "Vertical (|V⟩)":
@@ -820,16 +796,16 @@ with tab3:
                 rotation_qc.rz(2 * faraday_angle, 0)
                 final_state = initial_state.evolve(rotation_qc)
                 
-                col1, col2 = st.columns(2)
-                with col1:
+                col1_bloch, col2_bloch = st.columns(2)
+                with col1_bloch:
                     st.markdown("**Initial State**")
-                    fig = plot_bloch_multivector(initial_state)
-                    st.pyplot(fig)
+                    fig_bloch_initial = plot_bloch_multivector(initial_state)
+                    st.pyplot(fig_bloch_initial)
                     plt.close()
-                with col2:
+                with col2_bloch:
                     st.markdown("**Final State**")
-                    fig = plot_bloch_multivector(final_state)
-                    st.pyplot(fig)
+                    fig_bloch_final = plot_bloch_multivector(final_state)
+                    st.pyplot(fig_bloch_final)
                     plt.close()
                 
             else:
@@ -929,29 +905,29 @@ with tab4:
     """, unsafe_allow_html=True)
     
     # Introduction
-    col1, col2 = st.columns(2)
+    col1_bb84, col2_bb84 = st.columns(2)
     
-    with col1:
+    with col1_bb84:
         st.markdown("""
         <div class="info-box" style="height: 100%;">
-        <h3 style="color: #667eea !important;">📚 What is BB84?</h3>
-        <p style="color: #000000;">
+        <h3>📚 What is BB84?</h3>
+        <p>
         <strong>BB84</strong> (Bennett-Brassard 1984) is the first and most famous quantum key distribution protocol. 
         It allows two parties, Alice and Bob, to generate a shared secret key that is provably secure against 
         any eavesdropper, even one with unlimited computing power.
         </p>
-        <p style="color: #000000;">
+        <p>
         The security comes from the fundamental laws of quantum mechanics - any attempt to measure or intercept 
         the quantum states will inevitably disturb them, alerting Alice and Bob to the presence of an eavesdropper.
         </p>
         </div>
         """, unsafe_allow_html=True)
     
-    with col2:
+    with col2_bb84:
         st.markdown("""
         <div class="info-box" style="height: 100%;">
-        <h3 style="color: #667eea !important;">🎯 Key Features</h3>
-        <ul style="font-size: 1.05rem; color: #000000;">
+        <h3>🎯 Key Features</h3>
+        <ul>
             <li><strong>Unconditional Security:</strong> Based on quantum physics, not computational complexity</li>
             <li><strong>Eavesdropping Detection:</strong> Any interception attempt is detectable</li>
             <li><strong>Perfect Forward Secrecy:</strong> Each session uses a new quantum key</li>
@@ -977,44 +953,44 @@ with tab4:
     with steps_col1:
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">1️⃣ Quantum Transmission</h4>
-        <p style="color: #000000;">Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
+        <h4>1️⃣ Quantum Transmission</h4>
+        <p>Alice encodes random bits using two different bases (rectilinear and diagonal) and sends photons to Bob.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">2️⃣ Random Measurement</h4>
-        <p style="color: #000000;">Bob randomly chooses bases to measure the received photons, recording the results.</p>
+        <h4>2️⃣ Random Measurement</h4>
+        <p>Bob randomly chooses bases to measure the received photons, recording the results.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">3️⃣ Basis Reconciliation</h4>
-        <p style="color: #000000;">Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
+        <h4>3️⃣ Basis Reconciliation</h4>
+        <p>Alice and Bob publicly compare their bases (not the bit values) and keep only matching measurements.</p>
         </div>
         """, unsafe_allow_html=True)
     
     with steps_col2:
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">4️⃣ Error Checking</h4>
-        <p style="color: #000000;">They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
+        <h4>4️⃣ Error Checking</h4>
+        <p>They sacrifice some bits to check for eavesdropping. High error rate indicates interference.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">5️⃣ Privacy Amplification</h4>
-        <p style="color: #000000;">The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
+        <h4>5️⃣ Privacy Amplification</h4>
+        <p>The remaining bits are processed to remove any partial information an eavesdropper might have.</p>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="info-box" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <h4 style="color: #764ba2 !important;">6️⃣ Secure Key</h4>
-        <p style="color: #000000;">Alice and Bob now share an identical, secret key for encrypting communications!</p>
+        <h4>6️⃣ Secure Key</h4>
+        <p>Alice and Bob now share an identical, secret key for encrypting communications!</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -1024,16 +1000,16 @@ with tab4:
     st.markdown("""
     <div style='background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%); 
                 padding: 1.8rem; border-radius: 15px; border-left: 5px solid #ffc107; 
-                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1); color: #856404;'>
         <h4 style='color: #856404; margin-bottom: 1rem; font-size: 1.5rem;'>💡 The Two Bases</h4>
         <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;'>
-            <div style='background: white; padding: 1rem; border-radius: 10px;'>
-                <strong style='color: #856404; font-size: 1.1rem;'>Rectilinear Basis (+):</strong><br>
-                <span style='color: #000;'>Horizontal (|0⟩) and Vertical (|1⟩) polarizations</span>
+            <div style='background: var(--secondary-background-color); padding: 1rem; border-radius: 10px;'>
+                <strong style='font-size: 1.1rem;'>Rectilinear Basis (+):</strong><br>
+                <span>Horizontal (|0⟩) and Vertical (|1⟩) polarizations</span>
             </div>
-            <div style='background: white; padding: 1rem; border-radius: 10px;'>
-                <strong style='color: #856404; font-size: 1.1rem;'>Diagonal Basis (×):</strong><br>
-                <span style='color: #000;'>+45° (|0⟩) and -45° (|1⟩) polarizations</span>
+            <div style='background: var(--secondary-background-color); padding: 1rem; border-radius: 10px;'>
+                <strong style='font-size: 1.1rem;'>Diagonal Basis (×):</strong><br>
+                <span>+45° (|0⟩) and -45° (|1⟩) polarizations</span>
             </div>
         </div>
     </div>
@@ -1043,11 +1019,11 @@ with tab4:
     st.markdown("""
     <div style='background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); 
                 padding: 1.8rem; border-radius: 15px; border-left: 5px solid #0c5460; 
-                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
-        <h4 style='color: #0c5460; margin-bottom: 1rem; font-size: 1.5rem;'>🛡️ Why is BB84 Unbreakable?</h4>
-        <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>Heisenberg Uncertainty Principle:</strong> Measuring a quantum state in the wrong basis disturbs it.</p>
-        <p style='margin-bottom: 0.8rem; color: #000;'><strong style='color: #0c5460;'>No-Cloning Theorem:</strong> It's impossible to create identical copies of unknown quantum states.</p>
-        <p style='margin-bottom: 0; color: #000;'><strong style='color: #0c5460;'>Observable Disturbance:</strong> Any eavesdropping attempt introduces detectable errors in the transmission.</p>
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1); color: #0c5460;'>
+        <h4 style='margin-bottom: 1rem; font-size: 1.5rem;'>🛡️ Why is BB84 Unbreakable?</h4>
+        <p style='margin-bottom: 0.8rem;'><strong >Heisenberg Uncertainty Principle:</strong> Measuring a quantum state in the wrong basis disturbs it.</p>
+        <p style='margin-bottom: 0.8rem;'><strong >No-Cloning Theorem:</strong> It's impossible to create identical copies of unknown quantum states.</p>
+        <p style='margin-bottom: 0;'><strong >Observable Disturbance:</strong> Any eavesdropping attempt introduces detectable errors in the transmission.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1055,13 +1031,13 @@ with tab4:
     st.markdown("""
     <div style='background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
                 padding: 1.8rem; border-radius: 15px; border-left: 5px solid #155724; 
-                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1);'>
-        <h4 style='color: #155724; margin-bottom: 1rem; font-size: 1.5rem;'>🌍 Real-World Applications</h4>
-        <ul style='margin-bottom: 0; color: #000;'>
-            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Banking & Finance:</strong> Securing high-value financial transactions</li>
-            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Government Communications:</strong> Protecting classified information</li>
-            <li style='margin-bottom: 0.5rem;'><strong style='color: #155724;'>Quantum Internet:</strong> Building the foundation for quantum networks</li>
-            <li><strong style='color: #155724;'>Satellite QKD:</strong> China's Micius satellite demonstrated space-based BB84</li>
+                margin-bottom: 2rem; box-shadow: 0 5px 20px rgba(0,0,0,0.1); color: #155724;'>
+        <h4 style='margin-bottom: 1rem; font-size: 1.5rem;'>🌍 Real-World Applications</h4>
+        <ul style='margin-bottom: 0;'>
+            <li style='margin-bottom: 0.5rem;'><strong>Banking & Finance:</strong> Securing high-value financial transactions</li>
+            <li style='margin-bottom: 0.5rem;'><strong>Government Communications:</strong> Protecting classified information</li>
+            <li style='margin-bottom: 0.5rem;'><strong>Quantum Internet:</strong> Building the foundation for quantum networks</li>
+            <li><strong>Satellite QKD:</strong> China's Micius satellite demonstrated space-based BB84</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -1079,8 +1055,8 @@ with tab4:
     """, unsafe_allow_html=True)
     
     # Center the button
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
+    col1_btn, col2_btn, col3_btn = st.columns([1, 2, 1])
+    with col2_btn:
         st.markdown("""
             <a href="https://bb84.srijan.dpdns.org/" target="_blank" style="text-decoration: none;">
                 <button class="custom-link-button">
@@ -1120,17 +1096,17 @@ with tab5:
     st.markdown("""
     <style>
     .profile-card {
-        background: white;
+        background: var(--secondary-background-color);
         padding: 2rem;
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         text-align: center;
         transition: all 0.3s ease;
         border: 1px solid rgba(102, 126, 234, 0.1);
-        display: flex; /* Use flexbox for alignment */
-        flex-direction: column; /* Stack items vertically */
-        justify-content: flex-start; /* Align content to the top */
-        height: 100%; /* Make cards in a row have the same height */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
     }
     .profile-card:hover {
         transform: translateY(-10px);
@@ -1161,16 +1137,17 @@ with tab5:
     }
     .profile-bio {
         font-size: 0.95rem;
-        color: #555;
+        color: var(--text-color);
+        opacity: 0.8;
         line-height: 1.6;
     }
     </style>
     """, unsafe_allow_html=True)
 
     # --- ROW 1 ---
-    col1, col2, col3 = st.columns(3, gap="large")
+    col1_team, col2_team, col3_team = st.columns(3, gap="large")
 
-    with col1:
+    with col1_team:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/abhinav.jpeg?raw=true" class="profile-img">
@@ -1182,7 +1159,7 @@ with tab5:
         </div>
         """, unsafe_allow_html=True)
 
-    with col2:
+    with col2_team:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/ibhann.jpeg?raw=true" class="profile-img">
@@ -1194,7 +1171,7 @@ with tab5:
         </div>
         """, unsafe_allow_html=True)
 
-    with col3:
+    with col3_team:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
@@ -1209,9 +1186,9 @@ with tab5:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # --- ROW 2 (Centered) ---
-    _, col4, col5, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
+    _, col4_team, col5_team, _ = st.columns([0.5, 1, 1, 0.5], gap="large")
 
-    with col4:
+    with col4_team:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
@@ -1223,7 +1200,7 @@ with tab5:
         </div>
         """, unsafe_allow_html=True)
 
-    with col5:
+    with col5_team:
         st.markdown("""
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
@@ -1239,8 +1216,8 @@ with tab5:
 # Footer
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
-    <div style='text-align: center; color: #666; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
-        <p style='font-size: 1.1rem; margin-bottom: 0.5rem;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
-        <p style='font-size: 0.9rem; opacity: 0.8;'>Visualizing quantum states on the Bloch sphere | Ibhan Mukherjee</p>
+    <div style='text-align: center; padding: 2rem 0; border-top: 2px solid #e0e0e0; margin-top: 3rem;'>
+        <p style='font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-color); opacity: 0.8;'>Made By Engineers 👷🏻‍♂️ For Curiosity Not Just For Credits 😉</p>
+        <p style='font-size: 0.9rem; color: var(--text-color); opacity: 0.7;'>Visualizing quantum states on the Bloch sphere | Ibhan Mukherjee</p>
     </div>
 """, unsafe_allow_html=True)

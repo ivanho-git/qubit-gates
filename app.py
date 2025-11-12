@@ -296,7 +296,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Animated Header
-st.markdown('<h1 class="main-header">⚛ Quantum Gate Simulator</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-header">⚛ Quantum Gate Simulator | Physics Research </h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Explore the fascinating world of quantum computing with interactive visualizations</p>', unsafe_allow_html=True)
 
 # Create tabs with icons

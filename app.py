@@ -1131,7 +1131,7 @@ with tab5:
     with col4:
         st.markdown("""
         <div class="profile-card">
-            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
+            <img src="https://github.com/ivanho-git/qubit-gates/blob/main/srijan.jpg?raw=true" class="profile-img">
             <p class="profile-name">SRIJAN GUCHHAIT</p>
             <p class="profile-role">BB84 Idealist</p>
             <p class="profile-role">25BCE5104</p>

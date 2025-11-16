@@ -1102,7 +1102,7 @@ with tab5:
         <div class="profile-card">
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/WhatsApp%20Image%202025-11-10%20at%2010.34.58%20AM.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
-            <p class="profile-role">How To Catch the Thief?</p>
+            <p class="profile-role">The Eve Hunter</p>
             <p class="profile-role">25BCE5182</p>
             <p class="profile-bio">
                 The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
@@ -1116,7 +1116,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
             <p class="profile-name">HARI ASHWIN</p>
             <p class="profile-role">Qubits and Gates Expert</p>
-            <p class="profile-role">25BCE</p>
+            <p class="profile-role">25BCE5107</p>
             <p class="profile-bio">
                 The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
             </p>

@@ -1090,6 +1090,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/abhinav.jpeg?raw=true" class="profile-img">
             <p class="profile-name">ABHINAV SUNEESH</p>
             <p class="profile-role">BB84 in DFS Researcher</p>
+            <p class="profile-role">25BCE5100</p>
             <p class="profile-bio">
                 Explores how BB84 operates within a Decoherence-Free Subspace to protect information from environmental noise.
             </p>
@@ -1102,6 +1103,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/WhatsApp%20Image%202025-11-10%20at%2010.34.58%20AM.jpeg?raw=true" class="profile-img">
             <p class="profile-name">IBHAN MUKHERJEE</p>
             <p class="profile-role">How To Catch the Thief?</p>
+            <p class="profile-role">25BCE5182</p>
             <p class="profile-bio">
                 The sneaky tester who tries to intercept the quantum key, showing how BB84 detects intrusions.
             </p>
@@ -1114,6 +1116,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0032.jpg?raw=true" class="profile-img">
             <p class="profile-name">HARI ASHWIN</p>
             <p class="profile-role">Qubits and Gates Expert</p>
+            <p class="profile-role">25BCE</p>
             <p class="profile-bio">
                 The technical mind explaining how qubits are prepared, transmitted, and measured using quantum logic gates.
             </p>
@@ -1131,6 +1134,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/gucci.jpeg?raw=true" class="profile-img">
             <p class="profile-name">SRIJAN GUCHHAIT</p>
             <p class="profile-role">BB84 Idealist</p>
+            <p class="profile-role">25BCE5104</p>
             <p class="profile-bio">
                 Introduces the BB84 protocol and demonstrates how it works perfectly in an ideal, noise-free setting.
             </p>
@@ -1143,6 +1147,7 @@ with tab5:
             <img src="https://github.com/ivanho-git/qubit-gates/blob/main/IMG-20251106-WA0008.jpg?raw=true" class="profile-img">
             <p class="profile-name">OM THAVARI</p>
             <p class="profile-role">Faraday Rotator Technician</p>
+            <p class="profile-role">25BCE5180</p>
             <p class="profile-bio">
                 Manages optical components, ensuring polarization rotations are precise and consistent.
             </p>
